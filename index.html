@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #F4EDE4 0%, #E8DCC8 100%);
+            background: linear-gradient(135deg, #f4ebe1 0%, #e8d5c4 100%);
             min-height: 100vh;
             padding: 20px;
             transition: all 0.3s ease;
@@ -29,7 +29,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #CC785C 0%, #D4816A 100%);
+            background: linear-gradient(135deg, #d97757 0%, #cc6244 100%);
             color: white;
             padding: 30px;
             text-align: center;
@@ -68,7 +68,7 @@
 
         .lang-switch:hover {
             background: white;
-            color: #CC785C;
+            color: #d97757;
         }
 
         .main-content {
@@ -85,38 +85,39 @@
         }
 
         .upload-zone {
-            border: 3px dashed #CC785C;
+            border: 3px dashed #d97757;
             border-radius: 15px;
-            padding: 40px;
+            padding: 30px;
             text-align: center;
-            background: #FFF9F5;
+            background: #fef9f5;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .upload-zone:hover {
-            background: #FFE8DC;
-            border-color: #D4816A;
+            background: #fef5ee;
+            border-color: #cc6244;
         }
 
         .upload-zone.dragover {
-            background: #FFD4C4;
-            border-color: #D4816A;
+            background: #fee8dd;
+            border-color: #cc6244;
             transform: scale(1.02);
         }
 
         .upload-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
+            font-size: 3em;
+            margin-bottom: 15px;
         }
 
         .canvas-container {
             position: relative;
             border: 2px solid #ddd;
             border-radius: 10px;
-            overflow: hidden;
+            overflow: auto;
             background: #f5f5f5;
             display: none;
+            max-height: 600px;
         }
 
         .canvas-container.active {
@@ -125,8 +126,15 @@
 
         canvas {
             display: block;
-            max-width: 100%;
             cursor: crosshair;
+        }
+
+        canvas.dragging {
+            cursor: grab;
+        }
+
+        canvas.grabbing {
+            cursor: grabbing;
         }
 
         .controls {
@@ -134,7 +142,7 @@
             gap: 10px;
             flex-wrap: wrap;
             padding: 20px;
-            background: #FFF9F5;
+            background: #fef9f5;
             border-radius: 10px;
         }
 
@@ -149,13 +157,13 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #CC785C 0%, #D4816A 100%);
+            background: linear-gradient(135deg, #d97757 0%, #cc6244 100%);
             color: white;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(204, 120, 92, 0.4);
+            box-shadow: 0 5px 15px rgba(217, 119, 87, 0.4);
         }
 
         .btn-secondary {
@@ -183,14 +191,14 @@
         }
 
         .info-panel {
-            background: #FFF9F5;
+            background: #fef9f5;
             padding: 20px;
             border-radius: 10px;
-            border: 2px solid #CC785C;
+            border: 2px solid #d97757;
         }
 
         .info-panel h3 {
-            color: #CC785C;
+            color: #d97757;
             margin-bottom: 15px;
             font-size: 1.3em;
         }
@@ -212,7 +220,7 @@
 
         .coord-label {
             font-weight: bold;
-            color: #CC785C;
+            color: #d97757;
         }
 
         .points-list {
@@ -229,16 +237,13 @@
             align-items: center;
             padding: 10px;
             margin: 5px 0;
-            background: #FFF9F5;
+            background: #fef9f5;
             border-radius: 5px;
             border-left: 4px solid;
         }
 
-        .point-item:nth-child(1) { border-color: #ff6b6b; }
-        .point-item:nth-child(2) { border-color: #4ecdc4; }
-        .point-item:nth-child(3) { border-color: #45b7d1; }
-        .point-item:nth-child(4) { border-color: #f9ca24; }
-        .point-item:nth-child(5) { border-color: #6c5ce7; }
+        .point-item:nth-child(odd) { border-color: #d97757; }
+        .point-item:nth-child(even) { border-color: #cc6244; }
 
         .delete-point {
             background: #dc3545;
@@ -298,7 +303,7 @@
         }
 
         .footer a {
-            color: #CC785C;
+            color: #d97757;
             text-decoration: none;
         }
 
@@ -363,6 +368,7 @@
                         <li>انقر على الصورة لحفظ نقطة وإحداثياتها</li>
                         <li>حرك الفأرة لمشاهدة الإحداثيات الحية</li>
                         <li>اختر نقطتين لقياس المسافة بينهما</li>
+                        <li>اضغط Shift + اسحب للتجول في الصورة المكبرة</li>
                         <li>صدّر النقاط إلى ملف CSV</li>
                     </ul>
                 </div>
@@ -390,7 +396,7 @@
 
                     <div class="zoom-controls">
                         <span id="zoomLabel">تكبير:</span>
-                        <input type="range" id="zoomSlider" min="50" max="300" value="100" oninput="updateZoom(this.value)">
+                        <input type="range" id="zoomSlider" min="100" max="300" value="100" oninput="updateZoom(this.value)">
                         <span id="zoomValue">100%</span>
                     </div>
                 </div>
