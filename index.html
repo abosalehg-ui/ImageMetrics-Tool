@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImageMetrics Tool - أداة قياسات الصور</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #F4EDE4 0%, #E8DCC8 100%);
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #CC785C 0%, #D4816A 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .lang-switch {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        [dir="ltr"] .lang-switch {
+            left: auto;
+            right: 30px;
+        }
+
+        .lang-switch:hover {
+            background: white;
+            color: #CC785C;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .canvas-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .upload-zone {
+            border: 3px dashed #CC785C;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: #FFF9F5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone:hover {
+            background: #FFE8DC;
+            border-color: #D4816A;
+        }
+
+        .upload-zone.dragover {
+            background: #FFD4C4;
+            border-color: #D4816A;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .canvas-container {
+            position: relative;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f5f5f5;
+            display: none;
+        }
+
+        .canvas-container.active {
+            display: block;
+        }
+
+        canvas {
+            display: block;
+            max-width: 100%;
+            cursor: crosshair;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: #FFF9F5;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #CC785C 0%, #D4816A 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(204, 120, 92, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-panel {
+            background: #FFF9F5;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #CC785C;
+        }
+
+        .info-panel h3 {
+            color: #CC785C;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .coord-display {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .coord-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .coord-label {
+            font-weight: bold;
+            color: #CC785C;
+        }
+
+        .points-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .point-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: #FFF9F5;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+
+        .point-item:nth-child(1) { border-color: #ff6b6b; }
+        .point-item:nth-child(2) { border-color: #4ecdc4; }
+        .point-item:nth-child(3) { border-color: #45b7d1; }
+        .point-item:nth-child(4) { border-color: #f9ca24; }
+        .point-item:nth-child(5) { border-color: #6c5ce7; }
+
+        .delete-point {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        [dir="ltr"] .color-preview {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .zoom-controls input[type="range"] {
+            flex: 1;
+        }
+
+        .distance-display {
+            background: #ffe66d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+
+        .distance-display.active {
+            display: block;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #CC785C;
+            text-decoration: none;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #ffc107;
+            margin-bottom: 20px;
+        }
+
+        .instructions h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .instructions ul {
+            margin-right: 20px;
+            color: #856404;
+        }
+
+        [dir="ltr"] .instructions ul {
+            margin-right: 0;
+            margin-left: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="lang-switch" onclick="toggleLanguage()">English</button>
+            <h1 id="mainTitle">ImageMetrics Tool</h1>
+            <p id="subtitle">أداة قياسات الصور - قياس الإحداثيات والمسافات بدقة</p>
+        </div>
+
+        <div class="main-content">
+            <div class="canvas-area">
+                <div class="instructions">
+                    <h4 id="instrTitle">📋 تعليمات الاستخدام:</h4>
+                    <ul id="instrList">
+                        <li>ارفع صورة بالنقر أو السحب والإفلات</li>
+                        <li>انقر على الصورة لحفظ نقطة وإحداثياتها</li>
+                        <li>حرك الفأرة لمشاهدة الإحداثيات الحية</li>
+                        <li>اختر نقطتين لقياس المسافة بينهما</li>
+                        <li>صدّر النقاط إلى ملف CSV</li>
+                    </ul>
+                </div>
+
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">📁</div>
+                    <h2 id="uploadTitle">اسحب وأفلت الصورة هنا</h2>
+                    <p id="uploadText">أو انقر للاختيار من جهازك</p>
+                    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+                </div>
+
+                <div class="canvas-container" id="canvasContainer">
+                    <canvas id="mainCanvas"></canvas>
+                </div>
+
+                <div class="controls">
+                    <button class="btn-primary" onclick="document.getElementById('fileInput').click()" id="btnNewImage">📁 صورة جديدة</button>
+                    <button class="btn-primary" onclick="exportToCSV()" id="btnExport">💾 تصدير CSV</button>
+                    <button class="btn-danger" onclick="clearAllPoints()" id="btnClear">🗑️ مسح الكل</button>
+                    
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="gridToggle" onchange="toggleGrid()">
+                        <span id="gridLabel">إظهار الشبكة</span>
+                    </label>
+
+                    <div class="zoom-controls">
+                        <span id="zoomLabel">تكبير:</span>
+                        <input type="range" id="zoomSlider" min="50" max="300" value="100" oninput="updateZoom(this.value)">
+                        <span id="zoomValue">100%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="info-panel">
+                    <h3 id="liveCoordTitle">📍 الإحداثيات الحية</h3>
+                    <div class="coord-display">
+                        <div class="coord-item">
+                            <span class="coord-label">X:</span>
+                            <span id="liveX">-</span>
+                        </div>
+                        <div class="coord-item">
+                            <span class="coord-label">Y:</span>
+                            <span id="liveY">-</span>
+                        </div>
+                        <div class="coord-item">
+                            <span class="coord-label">RGB:</span>
+                            <span id="liveRGB">-</span>
+                        </div>
+                        <div class="coord-item">
+                            <span class="coord-label">HEX:</span>
+                            <span id="liveHEX">-</span>
+                            <span class="color-preview" id="colorPreview"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-panel">
+                    <h3 id="savedPointsTitle">📌 النقاط المحفوظة</h3>
+                    <div class="points-list" id="pointsList">
+                        <p id="noPoints" style="text-align:center;color:#999;">لا توجد نقاط محفوظة</p>
+                    </div>
+                    <div class="distance-display" id="distanceDisplay">
+                        <span id="distanceLabel">المسافة:</span> <span id="distanceValue">0</span> px
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>تطوير: عبدالكريم العبود | <a href="mailto:abo.saleh.g@gmail.com">abo.saleh.g@gmail.com</a></p>
+            <p>© 2024 ImageMetrics Tool - All Rights Reserved</p>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'ar';
+        const translations = {
+            ar: {
+                mainTitle: 'ImageMetrics Tool',
+                subtitle: 'أداة قياسات الصور - قياس الإحداثيات والمسافات بدقة',
+                instrTitle: '📋 تعليمات الاستخدام:',
+                instrList: [
+                    'ارفع صورة بالنقر أو السحب والإفلات',
+                    'انقر على الصورة لحفظ نقطة وإحداثياتها',
+                    'حرك الفأرة لمشاهدة الإحداثيات الحية',
+                    'اختر نقطتين لقياس المسافة بينهما',
+                    'صدّر النقاط إلى ملف CSV'
+                ],
+                uploadTitle: 'اسحب وأفلت الصورة هنا',
+                uploadText: 'أو انقر للاختيار من جهازك',
+                btnNewImage: '📁 صورة جديدة',
+                btnExport: '💾 تصدير CSV',
+                btnClear: '🗑️ مسح الكل',
+                gridLabel: 'إظهار الشبكة',
+                zoomLabel: 'تكبير:',
+                liveCoordTitle: '📍 الإحداثيات الحية',
+                savedPointsTitle: '📌 النقاط المحفوظة',
+                noPoints: 'لا توجد نقاط محفوظة',
+                distanceLabel: 'المسافة:',
+                point: 'نقطة'
+            },
+            en: {
+                mainTitle: 'ImageMetrics Tool',
+                subtitle: 'Image Measurement Tool - Precise Coordinates and Distance Measurement',
+                instrTitle: '📋 Instructions:',
+                instrList: [
+                    'Upload an image by clicking or drag & drop',
+                    'Click on the image to save a point and its coordinates',
+                    'Move mouse to see live coordinates',
+                    'Select two points to measure distance',
+                    'Export points to CSV file'
+                ],
+                uploadTitle: 'Drag & Drop Image Here',
+                uploadText: 'Or click to select from your device',
+                btnNewImage: '📁 New Image',
+                btnExport: '💾 Export CSV',
+                btnClear: '🗑️ Clear All',
+                gridLabel: 'Show Grid',
+                zoomLabel: 'Zoom:',
+                liveCoordTitle: '📍 Live Coordinates',
+                savedPointsTitle: '📌 Saved Points',
+                noPoints: 'No saved points',
+                distanceLabel: 'Distance:',
+                point: 'Point'
+            }
+        };
+
+        const canvas = document.getElementById('mainCanvas');
+        const ctx = canvas.getContext('2d');
+        let img = null;
+        let points = [];
+        let showGrid = false;
+        let zoom = 1;
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#ff6348', '#2ecc71'];
+
+        // Upload handlers
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+        
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                loadImage(file);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) loadImage(file);
+        });
+
+        function loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img = new Image();
+                img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    document.getElementById('canvasContainer').classList.add('active');
+                    points = [];
+                    renderCanvas();
+                    updatePointsList();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderCanvas() {
+            if (!img) return;
+            
+            ctx.save();
+            ctx.scale(zoom, zoom);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+
+            if (showGrid) {
+                drawGrid();
+            }
+
+            points.forEach((point, idx) => {
+                drawPoint(point.x, point.y, colors[idx % colors.length], idx + 1);
+            });
+
+            ctx.restore();
+        }
+
+        function drawGrid() {
+            const gridSize = 50;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1;
+
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+        }
+
+        function drawPoint(x, y, color, number) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(number, x, y + 4);
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!img) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.round((e.clientX - rect.left) / zoom);
+            const y = Math.round((e.clientY - rect.top) / zoom);
+
+            document.getElementById('liveX').textContent = x;
+            document.getElementById('liveY').textContent = y;
+
+            const pixel = ctx.getImageData(x * zoom, y * zoom, 1, 1).data;
+            const rgb = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+            const hex = '#' + [pixel[0], pixel[1], pixel[2]].map(x => x.toString(16).padStart(2, '0')).join('');
+            
+            document.getElementById('liveRGB').textContent = rgb;
+            document.getElementById('liveHEX').textContent = hex;
+            document.getElementById('colorPreview').style.background = hex;
+        });
+
+        canvas.addEventListener('click', (e) => {
+            if (!img) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.round((e.clientX - rect.left) / zoom);
+            const y = Math.round((e.clientY - rect.top) / zoom);
+
+            const pixel = ctx.getImageData(x * zoom, y * zoom, 1, 1).data;
+            const hex = '#' + [pixel[0], pixel[1], pixel[2]].map(x => x.toString(16).padStart(2, '0')).join('');
+
+            points.push({ x, y, color: hex });
+            renderCanvas();
+            updatePointsList();
+            calculateDistance();
+        });
+
+        function updatePointsList() {
+            const list = document.getElementById('pointsList');
+            const noPoints = document.getElementById('noPoints');
+            
+            if (points.length === 0) {
+                list.innerHTML = '<p id="noPoints" style="text-align:center;color:#999;">' + translations[currentLang].noPoints + '</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            
+            points.forEach((point, idx) => {
+                const div = document.createElement('div');
+                div.className = 'point-item';
+                div.innerHTML = `
+                    <div>
+                        <strong>${translations[currentLang].point} ${idx + 1}</strong><br>
+                        X: ${point.x}, Y: ${point.y}<br>
+                        <small>${point.color}</small>
+                    </div>
+                    <button class="delete-point" onclick="deletePoint(${idx})">❌</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function deletePoint(idx) {
+            points.splice(idx, 1);
+            renderCanvas();
+            updatePointsList();
+            calculateDistance();
+        }
+
+        function clearAllPoints() {
+            if (confirm(currentLang === 'ar' ? 'هل تريد حذف جميع النقاط؟' : 'Delete all points?')) {
+                points = [];
+                renderCanvas();
+                updatePointsList();
+                document.getElementById('distanceDisplay').classList.remove('active');
+            }
+        }
+
+        function calculateDistance() {
+            if (points.length >= 2) {
+                const p1 = points[points.length - 2];
+                const p2 = points[points.length - 1];
+                const distance = Math.round(Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2)));
+                document.getElementById('distanceValue').textContent = distance;
+                document.getElementById('distanceDisplay').classList.add('active');
+            } else {
+                document.getElementById('distanceDisplay').classList.remove('active');
+            }
+        }
+
+        function exportToCSV() {
+            if (points.length === 0) {
+                alert(currentLang === 'ar' ? 'لا توجد نقاط لتصديرها' : 'No points to export');
+                return;
+            }
+
+            let csv = 'Point,X,Y,Color\n';
+            points.forEach((point, idx) => {
+                csv += `${idx + 1},${point.x},${point.y},${point.color}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'image_coordinates.csv';
+            a.click();
+        }
+
+        function toggleGrid() {
+            showGrid = document.getElementById('gridToggle').checked;
+            renderCanvas();
+        }
+
+        function updateZoom(value) {
+            zoom = value / 100;
+            document.getElementById('zoomValue').textContent = value + '%';
+            renderCanvas();
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.querySelector('.lang-switch').textContent = currentLang === 'ar' ? 'English' : 'العربية';
+            
+            const t = translations[currentLang];
+            document.getElementById('mainTitle').textContent = t.mainTitle;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('instrTitle').textContent = t.instrTitle;
+            
+            const instrList = document.getElementById('instrList');
+            instrList.innerHTML = '';
+            t.instrList.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                instrList.appendChild(li);
+            });
+            
+            document.getElementById('uploadTitle').textContent = t.uploadTitle;
+            document.getElementById('uploadText').textContent = t.uploadText;
+            document.getElementById('btnNewImage').textContent = t.btnNewImage;
+            document.getElementById('btnExport').textContent = t.btnExport;
+            document.getElementById('btnClear').textContent = t.btnClear;
+            document.getElementById('gridLabel').textContent = t.gridLabel;
+            document.getElementById('zoomLabel').textContent = t.zoomLabel;
+            document.getElementById('liveCoordTitle').textContent = t.liveCoordTitle;
+            document.getElementById('savedPointsTitle').textContent = t.savedPointsTitle;
+            document.getElementById('noPoints').textContent = t.noPoints;
+            document.getElementById('distanceLabel').textContent = t.distanceLabel;
+            
+            updatePointsList();
+        }
+    </script>
+</body>
+</html>
