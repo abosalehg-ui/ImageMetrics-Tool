@@ -306,6 +306,15 @@ copies or substantial portions of the Software.
 - [ ] وضع الليل (Dark Mode)
 - [ ] اختصارات لوحة المفاتيح
 
+
+---
+
+### معلومات الاتصال
+
+- 📧 **البريد**: abo.saleh.g@gmail.com
+- 🌐 **GitHub**: [[Your GitHub Profile](https://github.com/abosalehg-ui/ImageMetrics-Tool/tree/main)]
+- 💻 **التطبيق**: [[Your App URL](https://abosalehg-ui.github.io/ImageMetrics-Tool/)]
+
 ---
 
 <a name="english"></a>
