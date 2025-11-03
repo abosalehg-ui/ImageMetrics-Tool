@@ -509,6 +509,13 @@ This tool is open source under MIT License.
 
 ---
 
+### Contact Information
+
+- 📧 **Email**: abo.saleh.g@gmail.com
+- 🌐 **GitHub**: [[Your GitHub Profile](https://github.com/abosalehg-ui/ImageMetrics-Tool/tree/main)]
+- 💻 **App**: [[Your App URL](https://abosalehg-ui.github.io/ImageMetrics-Tool/)]
+
+---
 <div align="center">
 
 **ImageMetrics Tool** - Precision in Every Pixel
