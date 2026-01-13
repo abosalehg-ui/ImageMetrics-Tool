@@ -312,8 +312,8 @@ copies or substantial portions of the Software.
 ### معلومات الاتصال
 
 - 📧 **البريد**: abo.saleh.g@gmail.com
-- 🌐 **GitHub**: [[Your GitHub Profile](https://github.com/abosalehg-ui/ImageMetrics-Tool/tree/main)]
-- 💻 **التطبيق**: [[Your App URL](https://abosalehg-ui.github.io/ImageMetrics-Tool/)]
+- 🌐 **GitHub**: [[صفحة الأداة](https://github.com/abosalehg-ui/ImageMetrics-Tool/tree/main)]
+- 💻 **التطبيق**: [[رابط الأداة](https://abosalehg-ui.github.io/ImageMetrics-Tool/)]
 
 ---
 
@@ -512,8 +512,8 @@ This tool is open source under MIT License.
 ### Contact Information
 
 - 📧 **Email**: abo.saleh.g@gmail.com
-- 🌐 **GitHub**: [[Your GitHub Profile](https://github.com/abosalehg-ui/ImageMetrics-Tool/tree/main)]
-- 💻 **App**: [[Your App URL](https://abosalehg-ui.github.io/ImageMetrics-Tool/)]
+- 🌐 **GitHub**: [[Tool page](https://github.com/abosalehg-ui/ImageMetrics-Tool/tree/main)]
+- 💻 **App**: [[Tool URL](https://abosalehg-ui.github.io/ImageMetrics-Tool/)]
 
 ---
 <div align="center">
