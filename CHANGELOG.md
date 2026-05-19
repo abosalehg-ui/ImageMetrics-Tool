@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed — تغيّر
+- **المرحلة 1:** فُصل `index.html` إلى ثلاثة ملفات:
+  - `css/styles.css` (الأنماط، كانت في `<style>` المضمّن)
+  - `js/app.js` (المنطق، كان في `<script>` المضمّن)
+  - `index.html` (هيكل HTML فقط)
+- استُبدلت سمات `onclick`/`onchange`/`oninput` المضمّنة في HTML بـ `addEventListener` في `js/app.js`.
+- استُخدم event delegation لأزرار حذف النقاط (`.delete-point`) بدلاً من inline `onclick`.
+
 ### Added — أُضيف
 - `package.json` مع devDependencies لاختبار و linting و formatting
 - إعداد ESLint بالـ flat config (`eslint.config.js`)
