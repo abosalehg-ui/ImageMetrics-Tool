@@ -1,0 +1,39 @@
+{
+  "name": "imagemetrics-tool",
+  "version": "1.0.0",
+  "description": "Web-based image measurement tool for precise pixel-level coordinate, distance, and color analysis",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [
+    "image",
+    "measurement",
+    "pixel",
+    "coordinates",
+    "color",
+    "canvas"
+  ],
+  "author": "Abdulkareem Alaboud <abo.saleh.g@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abosalehg-ui/ImageMetrics-Tool.git"
+  },
+  "homepage": "https://abosalehg-ui.github.io/ImageMetrics-Tool/",
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "eslint": "^9.15.0",
+    "globals": "^15.12.0",
+    "jsdom": "^25.0.1",
+    "prettier": "^3.3.3",
+    "vitest": "^2.1.5"
+  }
+}
