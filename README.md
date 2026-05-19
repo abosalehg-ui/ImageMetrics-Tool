@@ -236,10 +236,40 @@ Point,X,Y,Color
 
 - **HTML5**: البنية الأساسية
 - **CSS3**: التصميم والتنسيق
-- **JavaScript (Vanilla)**: جميع الوظائف
+- **JavaScript (Vanilla, ES Modules)**: جميع الوظائف
 - **Canvas API**: معالجة الصور والرسم
 - **File API**: رفع الصور
 - **Blob API**: تصدير CSV
+- **Fetch API**: تحميل ملفات الترجمة (`locales/*.json`)
+
+### 🧰 التطوير المحلي
+
+بسبب استخدام ES Modules و `fetch` لتحميل ملفات الترجمة، **لا يمكن تشغيل الأداة بفتح `index.html` مباشرة** من نظام الملفات (سياسة CORS تمنع ذلك). شغّل خادماً محلياً بسيطاً:
+
+```bash
+# الخيار 1: عبر npm (يتطلب npm install أولاً)
+npm run dev
+
+# الخيار 2: مباشرة دون تثبيت
+npx serve .
+
+# الخيار 3: Python
+python3 -m http.server 8000
+```
+
+ثم افتح `http://localhost:8000` (أو المنفذ الذي يطبعه الخادم).
+
+**ملاحظة:** على GitHub Pages يعمل التطبيق بشكل طبيعي دون الحاجة لأي إعداد إضافي.
+
+### 🧪 سكريبتات المطوّر
+
+```bash
+npm install          # تثبيت أدوات التطوير (أول مرة فقط)
+npm run dev          # خادم محلي للتطوير
+npm run lint         # فحص ESLint
+npm run format       # تطبيق Prettier
+npm run format:check # التحقق من التنسيق
+```
 
 ---
 
@@ -479,6 +509,37 @@ Point,X,Y,Color
 - Analyze microscope images
 - Measure dimensions in images
 - Document spatial data
+
+---
+
+## 🧰 Local Development
+
+Because the app uses ES Modules and `fetch` to load locale files, **opening `index.html` directly from the filesystem will not work** (CORS policy blocks it). Run a small local server:
+
+```bash
+# Option 1: via npm (requires npm install first)
+npm run dev
+
+# Option 2: directly, no install needed
+npx serve .
+
+# Option 3: Python
+python3 -m http.server 8000
+```
+
+Then open `http://localhost:8000` (or whatever port the server prints).
+
+**Note:** The deployed app on GitHub Pages works out of the box — no extra setup required.
+
+### Developer Scripts
+
+```bash
+npm install          # Install dev tooling (first time only)
+npm run dev          # Start local dev server
+npm run lint         # Run ESLint
+npm run format       # Apply Prettier
+npm run format:check # Verify formatting
+```
 
 ---
 

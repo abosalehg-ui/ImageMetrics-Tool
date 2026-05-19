@@ -1,0 +1,27 @@
+{
+  "mainTitle": "ImageMetrics Tool",
+  "subtitle": "Image Measurement Tool - Precise Coordinates and Distance Measurement",
+  "instrTitle": "📋 Instructions:",
+  "instrList": [
+    "Upload an image by clicking or drag & drop",
+    "Click on the image to save a point and its coordinates",
+    "Move mouse to see live coordinates",
+    "Select two points to measure distance",
+    "Hold Shift and drag to pan when zoomed",
+    "Export points to CSV file"
+  ],
+  "uploadTitle": "Drag & Drop Image Here",
+  "uploadText": "Or click to select from your device",
+  "btnNewImage": "📁 New Image",
+  "btnExport": "💾 Export CSV",
+  "btnClear": "🗑️ Clear All",
+  "gridLabel": "Show Grid",
+  "zoomLabel": "Zoom:",
+  "liveCoordTitle": "📍 Live Coordinates",
+  "savedPointsTitle": "📌 Saved Points",
+  "noPoints": "No saved points",
+  "distanceLabel": "Distance:",
+  "point": "Point",
+  "confirmClearAll": "Delete all points?",
+  "noPointsToExport": "No points to export"
+}
