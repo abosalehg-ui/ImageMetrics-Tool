@@ -269,6 +269,9 @@ npm run dev          # خادم محلي للتطوير
 npm run lint         # فحص ESLint
 npm run format       # تطبيق Prettier
 npm run format:check # التحقق من التنسيق
+npm test             # تشغيل اختبارات الوحدة (Vitest، مراقبة)
+npm run test:run     # تشغيل الاختبارات مرة واحدة
+npm run test:coverage # تشغيل مع تقرير التغطية
 ```
 
 ---
@@ -534,11 +537,14 @@ Then open `http://localhost:8000` (or whatever port the server prints).
 ### Developer Scripts
 
 ```bash
-npm install          # Install dev tooling (first time only)
-npm run dev          # Start local dev server
-npm run lint         # Run ESLint
-npm run format       # Apply Prettier
-npm run format:check # Verify formatting
+npm install           # Install dev tooling (first time only)
+npm run dev           # Start local dev server
+npm run lint          # Run ESLint
+npm run format        # Apply Prettier
+npm run format:check  # Verify formatting
+npm test              # Run unit tests (Vitest, watch mode)
+npm run test:run      # Run tests once
+npm run test:coverage # Run with coverage report
 ```
 
 ---

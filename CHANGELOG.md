@@ -12,6 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — أُضيف (المرحلة 3)
+- بنية اختبارات الوحدة بـ Vitest:
+  - `tests/unit/measurements.test.js` (8 اختبارات)
+  - `tests/unit/color.test.js` (10 اختبارات)
+  - `tests/unit/state.test.js` (8 اختبارات)
+  - `tests/unit/export.test.js` (5 اختبارات)
+- `vitest.config.js` مع بيئة jsdom وتقارير تغطية v8
+- `@vitest/coverage-v8` إلى devDependencies
+- استُخرجت `pointsToCSV(points)` كدالة خالصة من `exportToCSV()` لتسهيل الاختبار
+- **31 اختباراً تمر، تغطية 100% على الدوال الخالصة:** `distance`, `rgbToHex`, `getPixelColor`, `setState`, `subscribe`, `pointsToCSV`
+
 ### Changed — تغيّر
 - **المرحلة 2:** قُسّم `js/app.js` إلى وحدات ES (ES Modules):
   - `js/main.js` — نقطة الدخول
