@@ -10,14 +10,14 @@
     <div class="container">
         <div class="header">
             <button class="lang-switch">English</button>
-            <h1 id="mainTitle">ImageMetrics Tool</h1>
-            <p id="subtitle">أداة قياسات الصور - قياس الإحداثيات والمسافات بدقة</p>
+            <h1 data-i18n="mainTitle">ImageMetrics Tool</h1>
+            <p data-i18n="subtitle">أداة قياسات الصور - قياس الإحداثيات والمسافات بدقة</p>
         </div>
 
         <div class="main-content">
             <div class="canvas-area">
                 <div class="instructions">
-                    <h4 id="instrTitle">📋 تعليمات الاستخدام:</h4>
+                    <h4 data-i18n="instrTitle">📋 تعليمات الاستخدام:</h4>
                     <ul id="instrList">
                         <li>ارفع صورة بالنقر أو السحب والإفلات</li>
                         <li>انقر على الصورة لحفظ نقطة وإحداثياتها</li>
@@ -30,8 +30,8 @@
 
                 <div class="upload-zone" id="uploadZone">
                     <div class="upload-icon">📁</div>
-                    <h2 id="uploadTitle">اسحب وأفلت الصورة هنا</h2>
-                    <p id="uploadText">أو انقر للاختيار من جهازك</p>
+                    <h2 data-i18n="uploadTitle">اسحب وأفلت الصورة هنا</h2>
+                    <p data-i18n="uploadText">أو انقر للاختيار من جهازك</p>
                     <input type="file" id="fileInput" accept="image/*" style="display:none;">
                 </div>
 
@@ -40,17 +40,17 @@
                 </div>
 
                 <div class="controls">
-                    <button class="btn-primary" id="btnNewImage">📁 صورة جديدة</button>
-                    <button class="btn-primary" id="btnExport">💾 تصدير CSV</button>
-                    <button class="btn-danger" id="btnClear">🗑️ مسح الكل</button>
+                    <button class="btn-primary" id="btnNewImage" data-i18n="btnNewImage">📁 صورة جديدة</button>
+                    <button class="btn-primary" id="btnExport" data-i18n="btnExport">💾 تصدير CSV</button>
+                    <button class="btn-danger" id="btnClear" data-i18n="btnClear">🗑️ مسح الكل</button>
 
                     <label class="checkbox-label">
                         <input type="checkbox" id="gridToggle">
-                        <span id="gridLabel">إظهار الشبكة</span>
+                        <span data-i18n="gridLabel">إظهار الشبكة</span>
                     </label>
 
                     <div class="zoom-controls">
-                        <span id="zoomLabel">تكبير:</span>
+                        <span data-i18n="zoomLabel">تكبير:</span>
                         <input type="range" id="zoomSlider" min="100" max="300" value="100">
                         <span id="zoomValue">100%</span>
                     </div>
@@ -59,7 +59,7 @@
 
             <div class="sidebar">
                 <div class="info-panel">
-                    <h3 id="liveCoordTitle">📍 الإحداثيات الحية</h3>
+                    <h3 data-i18n="liveCoordTitle">📍 الإحداثيات الحية</h3>
                     <div class="coord-display">
                         <div class="coord-item">
                             <span class="coord-label">X:</span>
@@ -82,12 +82,12 @@
                 </div>
 
                 <div class="info-panel">
-                    <h3 id="savedPointsTitle">📌 النقاط المحفوظة</h3>
+                    <h3 data-i18n="savedPointsTitle">📌 النقاط المحفوظة</h3>
                     <div class="points-list" id="pointsList">
-                        <p id="noPoints" style="text-align:center;color:#999;">لا توجد نقاط محفوظة</p>
+                        <p style="text-align:center;color:#999;">لا توجد نقاط محفوظة</p>
                     </div>
                     <div class="distance-display" id="distanceDisplay">
-                        <span id="distanceLabel">المسافة:</span> <span id="distanceValue">0</span> px
+                        <span data-i18n="distanceLabel">المسافة:</span> <span id="distanceValue">0</span> px
                     </div>
                 </div>
             </div>
@@ -99,6 +99,6 @@
         </div>
     </div>
 
-    <script src="js/app.js" defer></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
