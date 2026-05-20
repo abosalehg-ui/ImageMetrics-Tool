@@ -12,6 +12,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — أُضيف (المرحلة 5)
+- اختبارات شاملة (E2E) بـ Playwright:
+  - `tests/e2e/app.spec.js` — 11 سيناريو مغطّاة:
+    - تحميل الصفحة وظهور منطقة الرفع
+    - الاتجاه الأولي (RTL مع `lang=ar`)
+    - تبديل اللغة مع تغيير `dir`/`lang` والنصوص
+    - رفع صورة وتفعيل canvas
+    - النقر لإضافة نقاط وحساب المسافة
+    - حذف نقطة واحدة عبر زر ❌
+    - مسح الكل مع التأكيد، والحفاظ عند الإلغاء
+    - شريط التكبير وتحديث النسبة المئوية
+    - تشغيل/إيقاف الشبكة
+    - تنزيل CSV بالاسم الصحيح
+  - `tests/fixtures/sample.png` — صورة اختبار صغيرة (100×100، RGB صلب).
+- `playwright.config.js` بإعداد متصفّح Chromium وخادم محلي تلقائي.
+- `serve` كـ devDependency لاستضافة الملفات في E2E.
+- وظيفة `e2e` جديدة في CI workflow:
+  - تعتمد على نجاح وظيفة `quality` (تتجنّب هدر CI minutes).
+  - تثبّت Chromium مع تبعيات النظام.
+  - ترفع تقرير Playwright كأرتيفاكت عند الفشل (للتشخيص).
+- سكريبتات npm: `test:e2e`, `test:e2e:ui`.
+
 ### Added — أُضيف (المرحلة 4)
 - `.github/workflows/ci.yml` — تشغيل ESLint و Prettier و Vitest على كل push و pull_request إلى `main`.
 - `.github/workflows/deploy.yml` — نشر تلقائي إلى GitHub Pages عند الـ push إلى `main`.
