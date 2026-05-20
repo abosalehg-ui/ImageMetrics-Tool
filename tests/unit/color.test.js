@@ -36,15 +36,24 @@ describe('rgbToHex', () => {
 });
 
 describe('getPixelColor', () => {
-  it('extracts color from a canvas context-like object', () => {
-    const ctx = {
-      getImageData: (x, y, w, h) => ({
-        data: new Uint8ClampedArray([255, 100, 50, 255]),
-        width: w,
-        height: h,
-      }),
+  /**
+   * @param {number[]} bytes
+   * @returns {Pick<CanvasRenderingContext2D, 'getImageData'>}
+   */
+  function mockCtx(bytes) {
+    return {
+      getImageData: (_x, _y, w, h) =>
+        /** @type {ImageData} */ ({
+          data: new Uint8ClampedArray(bytes),
+          width: w,
+          height: h,
+          colorSpace: 'srgb',
+        }),
     };
-    const result = getPixelColor(ctx, 10, 20);
+  }
+
+  it('extracts color from a canvas context-like object', () => {
+    const result = getPixelColor(mockCtx([255, 100, 50, 255]), 10, 20);
     expect(result.r).toBe(255);
     expect(result.g).toBe(100);
     expect(result.b).toBe(50);
@@ -53,9 +62,6 @@ describe('getPixelColor', () => {
   });
 
   it('returns black for fully transparent black pixel', () => {
-    const ctx = {
-      getImageData: () => ({ data: new Uint8ClampedArray([0, 0, 0, 0]) }),
-    };
-    expect(getPixelColor(ctx, 0, 0).hex).toBe('#000000');
+    expect(getPixelColor(mockCtx([0, 0, 0, 0]), 0, 0).hex).toBe('#000000');
   });
 });

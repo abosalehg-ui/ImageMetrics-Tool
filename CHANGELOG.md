@@ -12,6 +12,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — أُضيف (المرحلة 6)
+- نهج **TypeScript تدريجي عبر JSDoc** بدون تغيير امتدادات الملفات أو إضافة build step:
+  - `tsconfig.json` بـ `allowJs: true`, `checkJs: true`, `noEmit: true`, `strict: true`.
+  - `js/types.d.ts` — تعريفات الأنواع المشتركة (`Point`, `Store`, `Lang`, `Translations`, `PixelColor`, إلخ).
+  - JSDoc type annotations مضافة لجميع الـ 10 وحدات في `js/`.
+- `typescript` كـ devDependency.
+- سكريبت `npm run typecheck` (`tsc --noEmit`).
+- خطوة "Type check (TypeScript)" في CI workflow بعد lint و format.
+- تحسينات في معالجة الأخطاء (null checks) في الوحدات التي تتعامل مع DOM.
+
+### Design Decision — قرار تصميمي
+**اخترنا JSDoc بدلاً من تحويل `.js` إلى `.ts`** للأسباب التالية:
+- صفر تغيير في النشر: الملفات تبقى `.js` ويخدمها GitHub Pages مباشرة.
+- لا حاجة لـ bundler أو خطوة build (نحافظ على فلسفة "بدون build step" للمشروع).
+- type safety كاملة عبر `tsc --noEmit` و `checkJs: true`.
+- يمكن الانتقال إلى ملفات `.ts` لاحقاً في Phase 6b دون تعقيدات.
+
 ### Added — أُضيف (المرحلة 5)
 - اختبارات شاملة (E2E) بـ Playwright:
   - `tests/e2e/app.spec.js` — 11 سيناريو مغطّاة:

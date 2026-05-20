@@ -1,7 +1,16 @@
 import { store, setState } from './state.js';
 
+/** @typedef {import('./types.d.ts').Lang} Lang */
+/** @typedef {import('./types.d.ts').Translations} Translations */
+
+/** @type {Translations} */
 let translations = {};
 
+/**
+ * Fetch a locale JSON file and apply translations to the DOM.
+ * @param {Lang} lang
+ * @returns {Promise<void>}
+ */
 export async function loadLocale(lang) {
   const res = await fetch(`locales/${lang}.json`);
   if (!res.ok) {
@@ -12,12 +21,24 @@ export async function loadLocale(lang) {
   applyTranslations();
 }
 
+/**
+ * Look up a string translation, falling back to the key if missing.
+ * @param {string} key
+ * @returns {string}
+ */
 export function t(key) {
-  return translations[key] ?? key;
+  const value = translations[key];
+  return typeof value === 'string' ? value : key;
 }
 
+/**
+ * Look up an array translation, falling back to empty array if missing.
+ * @param {string} key
+ * @returns {string[]}
+ */
 export function tArray(key) {
-  return translations[key] ?? [];
+  const value = translations[key];
+  return Array.isArray(value) ? value : [];
 }
 
 function applyTranslations() {
@@ -30,7 +51,8 @@ function applyTranslations() {
   }
 
   document.querySelectorAll('[data-i18n]').forEach((el) => {
-    el.textContent = t(el.dataset.i18n);
+    const key = /** @type {HTMLElement} */ (el).dataset.i18n;
+    if (key) el.textContent = t(key);
   });
 
   const instrList = document.getElementById('instrList');
@@ -44,7 +66,9 @@ function applyTranslations() {
   }
 }
 
+/** @returns {Promise<void>} */
 export async function toggleLanguage() {
+  /** @type {Lang} */
   const newLang = store.lang === 'ar' ? 'en' : 'ar';
   await loadLocale(newLang);
 }

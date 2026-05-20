@@ -3,6 +3,13 @@ import { t } from './i18n.js';
 import { renderCanvas } from './canvas.js';
 import { distance } from './measurements.js';
 
+/** @typedef {import('./types.d.ts').Point} Point */
+
+/**
+ * @param {number} x
+ * @param {number} y
+ * @param {string} color
+ */
 export function addPoint(x, y, color) {
   setState({ points: [...store.points, { x, y, color }] });
   renderCanvas();
@@ -10,6 +17,7 @@ export function addPoint(x, y, color) {
   updateDistanceDisplay();
 }
 
+/** @param {number} idx */
 export function deletePoint(idx) {
   const newPoints = [...store.points];
   newPoints.splice(idx, 1);
@@ -24,12 +32,14 @@ export function clearAllPoints() {
     setState({ points: [] });
     renderCanvas();
     updatePointsList();
-    document.getElementById('distanceDisplay').classList.remove('active');
+    const displayEl = document.getElementById('distanceDisplay');
+    if (displayEl) displayEl.classList.remove('active');
   }
 }
 
 export function updatePointsList() {
   const list = document.getElementById('pointsList');
+  if (!list) return;
   const { points } = store;
 
   if (points.length === 0) {
@@ -56,9 +66,11 @@ export function updatePointsList() {
 export function updateDistanceDisplay() {
   const { points } = store;
   const displayEl = document.getElementById('distanceDisplay');
+  if (!displayEl) return;
   if (points.length >= 2) {
     const dist = distance(points[points.length - 2], points[points.length - 1]);
-    document.getElementById('distanceValue').textContent = dist;
+    const valueEl = document.getElementById('distanceValue');
+    if (valueEl) valueEl.textContent = String(dist);
     displayEl.classList.add('active');
   } else {
     displayEl.classList.remove('active');
