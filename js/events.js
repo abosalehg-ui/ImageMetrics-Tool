@@ -12,8 +12,8 @@ export function setupCanvasEvents() {
   const canvas = getCanvas();
   const ctx = getContext();
   const canvasContainer = document.getElementById('canvasContainer');
+  if (!canvasContainer) return;
 
-  // Drag to pan when zoomed
   canvas.addEventListener('mousedown', (e) => {
     if (store.zoom > 1 && e.button === 0 && e.shiftKey) {
       setState({ isDragging: true });
@@ -43,7 +43,6 @@ export function setupCanvasEvents() {
     }
   });
 
-  // Live coordinates + color preview
   canvas.addEventListener('mousemove', (e) => {
     if (!store.img || store.isDragging) return;
     const rect = canvas.getBoundingClientRect();
@@ -51,18 +50,22 @@ export function setupCanvasEvents() {
     const x = Math.round((e.clientX - rect.left) / zoom);
     const y = Math.round((e.clientY - rect.top) / zoom);
 
-    document.getElementById('liveX').textContent = x;
-    document.getElementById('liveY').textContent = y;
+    const liveX = document.getElementById('liveX');
+    const liveY = document.getElementById('liveY');
+    if (liveX) liveX.textContent = String(x);
+    if (liveY) liveY.textContent = String(y);
 
     const imgData = ctx.getImageData(e.clientX - rect.left, e.clientY - rect.top, 1, 1);
     const [r, g, b] = imgData.data;
     const hex = rgbToHex(r, g, b);
-    document.getElementById('liveRGB').textContent = `rgb(${r}, ${g}, ${b})`;
-    document.getElementById('liveHEX').textContent = hex;
-    document.getElementById('colorPreview').style.background = hex;
+    const liveRGB = document.getElementById('liveRGB');
+    const liveHEX = document.getElementById('liveHEX');
+    const preview = document.getElementById('colorPreview');
+    if (liveRGB) liveRGB.textContent = `rgb(${r}, ${g}, ${b})`;
+    if (liveHEX) liveHEX.textContent = hex;
+    if (preview) preview.style.background = hex;
   });
 
-  // Click to save point
   canvas.addEventListener('click', (e) => {
     if (!store.img || store.isDragging) return;
     const rect = canvas.getBoundingClientRect();

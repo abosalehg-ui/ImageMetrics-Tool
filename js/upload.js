@@ -4,7 +4,8 @@ import { updatePointsList } from './points.js';
 
 export function setupUploadHandlers() {
   const uploadZone = document.getElementById('uploadZone');
-  const fileInput = document.getElementById('fileInput');
+  const fileInput = /** @type {HTMLInputElement | null} */ (document.getElementById('fileInput'));
+  if (!uploadZone || !fileInput) return;
 
   uploadZone.addEventListener('click', () => fileInput.click());
 
@@ -20,35 +21,41 @@ export function setupUploadHandlers() {
   uploadZone.addEventListener('drop', (e) => {
     e.preventDefault();
     uploadZone.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
+    const file = e.dataTransfer?.files[0];
     if (file && file.type.startsWith('image/')) {
       loadImage(file);
     }
   });
 
   fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
+    const target = /** @type {HTMLInputElement} */ (e.target);
+    const file = target.files?.[0];
     if (file) loadImage(file);
   });
 }
 
+/** @param {File} file */
 export function loadImage(file) {
   const reader = new FileReader();
   reader.onload = (e) => {
+    const result = e.target?.result;
+    if (typeof result !== 'string') return;
     const img = new Image();
     img.onload = () => {
       const canvas = getCanvas();
       canvas.width = img.width;
       canvas.height = img.height;
-      document.getElementById('canvasContainer').classList.add('active');
+      document.getElementById('canvasContainer')?.classList.add('active');
       setState({ img, points: [], zoom: 1 });
-      document.getElementById('zoomSlider').value = 100;
-      document.getElementById('zoomValue').textContent = '100%';
+      const slider = /** @type {HTMLInputElement | null} */ (document.getElementById('zoomSlider'));
+      if (slider) slider.value = '100';
+      const zoomValue = document.getElementById('zoomValue');
+      if (zoomValue) zoomValue.textContent = '100%';
       renderCanvas();
       updatePointsList();
-      document.getElementById('distanceDisplay').classList.remove('active');
+      document.getElementById('distanceDisplay')?.classList.remove('active');
     };
-    img.src = e.target.result;
+    img.src = result;
   };
   reader.readAsDataURL(file);
 }

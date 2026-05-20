@@ -63,12 +63,13 @@ describe('subscribe', () => {
   });
 
   it('passes the current store to the subscriber', () => {
+    /** @type {import('../../js/types.d.ts').Store | undefined} */
     let received;
     subscribe((s) => {
       received = s;
     });
     setState({ zoom: 5 });
-    expect(received.zoom).toBe(5);
+    expect(received?.zoom).toBe(5);
   });
 
   it('returns an unsubscribe function that detaches the listener', () => {

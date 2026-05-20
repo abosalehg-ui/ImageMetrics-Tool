@@ -2,23 +2,32 @@ import { store } from './state.js';
 
 const POINT_COLORS = ['#d97757', '#cc6244', '#b85739', '#a34d30', '#8f4427', '#7a3b1f', '#663218'];
 
+/** @type {HTMLCanvasElement | null} */
 let canvas = null;
+
+/** @type {CanvasRenderingContext2D | null} */
 let ctx = null;
 
+/** @param {HTMLCanvasElement} canvasEl */
 export function initCanvas(canvasEl) {
   canvas = canvasEl;
   ctx = canvas.getContext('2d');
 }
 
+/** @returns {HTMLCanvasElement} */
 export function getCanvas() {
+  if (!canvas) throw new Error('Canvas not initialized — call initCanvas() first');
   return canvas;
 }
 
+/** @returns {CanvasRenderingContext2D} */
 export function getContext() {
+  if (!ctx) throw new Error('Canvas context not initialized — call initCanvas() first');
   return ctx;
 }
 
 export function renderCanvas() {
+  if (!canvas || !ctx) return;
   const { img, zoom, showGrid, points } = store;
   if (!img) return;
 
@@ -38,6 +47,7 @@ export function renderCanvas() {
 }
 
 function drawGrid() {
+  if (!canvas || !ctx) return;
   const { zoom } = store;
   const gridSize = 50 * zoom;
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
@@ -58,7 +68,14 @@ function drawGrid() {
   }
 }
 
+/**
+ * @param {number} x
+ * @param {number} y
+ * @param {string} color
+ * @param {number} number
+ */
 function drawPoint(x, y, color, number) {
+  if (!ctx) return;
   const { zoom } = store;
   const radius = 8 * zoom;
   ctx.fillStyle = color;
@@ -72,5 +89,5 @@ function drawPoint(x, y, color, number) {
   ctx.fillStyle = 'white';
   ctx.font = `bold ${12 * zoom}px Arial`;
   ctx.textAlign = 'center';
-  ctx.fillText(number, x, y + 4 * zoom);
+  ctx.fillText(String(number), x, y + 4 * zoom);
 }

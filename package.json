@@ -11,6 +11,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -39,6 +40,7 @@
     "jsdom": "^25.0.1",
     "prettier": "^3.3.3",
     "serve": "^14.2.4",
+    "typescript": "^5.6.3",
     "vitest": "^2.1.5"
   }
 }
