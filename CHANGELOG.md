@@ -12,6 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — أُضيف (المرحلة 4)
+- `.github/workflows/ci.yml` — تشغيل ESLint و Prettier و Vitest على كل push و pull_request إلى `main`.
+- `.github/workflows/deploy.yml` — نشر تلقائي إلى GitHub Pages عند الـ push إلى `main`.
+- ميزات الـ workflow:
+  - تخزين مؤقت لـ npm (`cache: 'npm'` في `setup-node`).
+  - إلغاء تشغيلات CI المكرّرة على نفس الـ ref (`concurrency: cancel-in-progress: true`).
+  - منع تداخل عمليات النشر (`concurrency.group: pages, cancel-in-progress: false`).
+  - استخدام أحدث إصدارات الـ actions: `actions/checkout@v4`, `actions/setup-node@v4`, `actions/configure-pages@v5`, `actions/upload-pages-artifact@v3`, `actions/deploy-pages@v4`.
+- شارة CI status في README.
+
 ### Added — أُضيف (المرحلة 3)
 - بنية اختبارات الوحدة بـ Vitest:
   - `tests/unit/measurements.test.js` (8 اختبارات)
