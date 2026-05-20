@@ -27,6 +27,14 @@ export default [
     },
   },
   {
-    ignores: ['node_modules/', 'dist/', 'coverage/'],
+    files: ['*.config.js', 'playwright.config.js', 'vitest.config.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    ignores: ['node_modules/', 'dist/', 'coverage/', 'playwright-report/', 'test-results/'],
   },
 ];

@@ -265,14 +265,16 @@ python3 -m http.server 8000
 ### 🧪 سكريبتات المطوّر
 
 ```bash
-npm install          # تثبيت أدوات التطوير (أول مرة فقط)
-npm run dev          # خادم محلي للتطوير
-npm run lint         # فحص ESLint
-npm run format       # تطبيق Prettier
-npm run format:check # التحقق من التنسيق
-npm test             # تشغيل اختبارات الوحدة (Vitest، مراقبة)
-npm run test:run     # تشغيل الاختبارات مرة واحدة
-npm run test:coverage # تشغيل مع تقرير التغطية
+npm install              # تثبيت أدوات التطوير (أول مرة فقط)
+npm run dev              # خادم محلي للتطوير
+npm run lint             # فحص ESLint
+npm run format           # تطبيق Prettier
+npm run format:check     # التحقق من التنسيق
+npm test                 # تشغيل اختبارات الوحدة (Vitest، مراقبة)
+npm run test:run         # تشغيل اختبارات الوحدة مرة واحدة
+npm run test:coverage    # تشغيل مع تقرير التغطية
+npm run test:e2e         # تشغيل اختبارات Playwright (تتطلب: npx playwright install chromium أولاً)
+npm run test:e2e:ui      # تشغيل Playwright مع واجهة تفاعلية
 ```
 
 ---
@@ -538,14 +540,16 @@ Then open `http://localhost:8000` (or whatever port the server prints).
 ### Developer Scripts
 
 ```bash
-npm install           # Install dev tooling (first time only)
-npm run dev           # Start local dev server
-npm run lint          # Run ESLint
-npm run format        # Apply Prettier
-npm run format:check  # Verify formatting
-npm test              # Run unit tests (Vitest, watch mode)
-npm run test:run      # Run tests once
-npm run test:coverage # Run with coverage report
+npm install              # Install dev tooling (first time only)
+npm run dev              # Start local dev server
+npm run lint             # Run ESLint
+npm run format           # Apply Prettier
+npm run format:check     # Verify formatting
+npm test                 # Run unit tests (Vitest, watch mode)
+npm run test:run         # Run unit tests once
+npm run test:coverage    # Run with coverage report
+npm run test:e2e         # Run Playwright E2E tests (first: npx playwright install chromium)
+npm run test:e2e:ui      # Run Playwright in interactive UI mode
 ```
 
 ---

@@ -8,6 +8,11 @@ build/
 # Test coverage
 coverage/
 
+# Playwright
+playwright-report/
+test-results/
+playwright/.cache/
+
 # Editor / IDE
 .vscode/
 .idea/
