@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.0-orange)
+![Version](https://img.shields.io/badge/version-2.0.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Language](https://img.shields.io/badge/languages-Arabic%20%7C%20English-green)
 [![CI](https://github.com/abosalehg-ui/ImageMetrics-Tool/actions/workflows/ci.yml/badge.svg)](https://github.com/abosalehg-ui/ImageMetrics-Tool/actions/workflows/ci.yml)
@@ -322,6 +322,26 @@ copies or substantial portions of the Software.
 
 ## 🔄 سجل التحديثات
 
+> راجع [`CHANGELOG.md`](./CHANGELOG.md) للتفاصيل الكاملة.
+
+### الإصدار 2.0.0 (2026)
+**تحوّل معماري شامل دون أي تغيير في وظائف المستخدم.**
+
+#### ✨ ميزات جديدة للمستخدم
+- 🌗 **الوضع الليلي التلقائي** — يتبع إعداد نظام التشغيل عبر `prefers-color-scheme`
+- 🎨 **تصميم احترافي جديد** — نظام tokens موحّد، طباعة محسّنة، تباعد مدروس، وحركات ناعمة
+- 📱 استجابة أفضل على الأجهزة المحمولة
+
+#### 🏗️ تحسينات هندسية (تحت الغطاء)
+- 📦 الكود مُقسَّم إلى **10 وحدات ES Modules** (بدلاً من ملف واحد بـ 802 سطر)
+- 🧹 **0 متغيرات عامة** (بدلاً من 13)
+- 🧪 **42 اختباراً آلياً** (31 unit + 11 E2E)
+- ✅ **100% تغطية** على الدوال الخالصة
+- 🔷 **TypeScript** عبر JSDoc + `tsc --noEmit` (أمان نوعي كامل)
+- 🤖 **CI/CD** على كل PR (ESLint + Prettier + TypeScript + Vitest + Playwright)
+- 🚀 **نشر تلقائي** إلى GitHub Pages
+- 🌐 **i18n** عبر `locales/{ar,en}.json` (إضافة لغة = ملف JSON واحد)
+
 ### الإصدار 1.0.0 (2024)
 - ✅ إطلاق الإصدار الأول
 - ✅ دعم كامل للغتين العربية والإنجليزية
@@ -334,14 +354,20 @@ copies or substantial portions of the Software.
 
 ## 🌟 الميزات المستقبلية
 
-- [ ] حفظ المشروع بالكامل
-- [ ] التراجع عن آخر عملية (Undo)
+- [x] ~~وضع الليل (Dark Mode)~~ ✅ *مُنفّذ في v2.0.0 (تلقائي)*
+- [ ] زر تبديل يدوي للوضع الليلي مع حفظ التفضيل
+- [ ] حفظ المشروع بالكامل (LocalStorage / JSON)
+- [ ] التراجع عن آخر عملية (Undo/Redo)
 - [ ] رسم خطوط وأشكال
 - [ ] قياس الزوايا
+- [ ] قياس المساحات (مضلعات)
+- [ ] المعايرة بوحدات حقيقية (سم/بوصة)
 - [ ] دعم ملفات PDF
 - [ ] طباعة النتائج
-- [ ] وضع الليل (Dark Mode)
 - [ ] اختصارات لوحة المفاتيح
+- [ ] PWA (تثبيت + عمل دون اتصال)
+
+> راجع [`IMPROVEMENTS.md`](./IMPROVEMENTS.md) لكتالوج شامل بأفكار التطوير.
 
 
 ---
@@ -570,16 +596,54 @@ This tool is open source under MIT License.
 
 ---
 
+## 🔄 Changelog
+
+> See [`CHANGELOG.md`](./CHANGELOG.md) for the complete history.
+
+### Version 2.0.0 (2026)
+**Full architectural overhaul with zero user-facing functional changes.**
+
+#### ✨ New user-facing features
+- 🌗 **Automatic dark mode** — follows system preference via `prefers-color-scheme`
+- 🎨 **Professional redesign** — unified design tokens, refined typography, generous spacing, subtle motion
+- 📱 Improved mobile responsiveness
+
+#### 🏗️ Engineering improvements (under the hood)
+- 📦 Code split into **10 ES Modules** (was one 802-line file)
+- 🧹 **0 global variables** (was 13)
+- 🧪 **42 automated tests** (31 unit + 11 E2E)
+- ✅ **100% coverage** on pure functions
+- 🔷 **TypeScript** via JSDoc + `tsc --noEmit` (full type safety, no build step)
+- 🤖 **CI/CD** on every PR (ESLint + Prettier + TypeScript + Vitest + Playwright)
+- 🚀 **Automatic deployment** to GitHub Pages
+- 🌐 **i18n** via `locales/{ar,en}.json` (adding a language = one JSON file)
+
+### Version 1.0.0 (2024)
+- ✅ Initial release
+- ✅ Full Arabic/English bilingual support
+- ✅ Coordinate and distance measurement
+- ✅ RGB/HEX color analysis
+- ✅ CSV data export
+- ✅ Modern user interface
+
+---
+
 ## 🌟 Future Features
 
-- [ ] Save entire project
-- [ ] Undo last operation
+- [x] ~~Dark Mode~~ ✅ *Shipped in v2.0.0 (automatic)*
+- [ ] Manual dark-mode toggle with preference persistence
+- [ ] Save entire project (LocalStorage / JSON)
+- [ ] Undo/Redo last operation
 - [ ] Draw lines and shapes
 - [ ] Measure angles
+- [ ] Measure areas (polygons)
+- [ ] Real-world unit calibration (cm / inch)
 - [ ] PDF file support
 - [ ] Print results
-- [ ] Dark Mode
 - [ ] Keyboard shortcuts
+- [ ] PWA (installable + offline)
+
+> See [`IMPROVEMENTS.md`](./IMPROVEMENTS.md) for the comprehensive idea catalog.
 
 ---
 
