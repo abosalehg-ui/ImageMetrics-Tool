@@ -5,6 +5,7 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Language](https://img.shields.io/badge/languages-Arabic%20%7C%20English-green)
+[![CI](https://github.com/abosalehg-ui/ImageMetrics-Tool/actions/workflows/ci.yml/badge.svg)](https://github.com/abosalehg-ui/ImageMetrics-Tool/actions/workflows/ci.yml)
 
 **أداة ويب احترافية لقياس إحداثيات النقاط والمسافات في الصور بدقة عالية**
 
