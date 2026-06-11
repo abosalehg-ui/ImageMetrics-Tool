@@ -3,8 +3,23 @@ import { store, setState } from './state.js';
 /** @typedef {import('./types.d.ts').Lang} Lang */
 /** @typedef {import('./types.d.ts').Translations} Translations */
 
+const STORAGE_KEY = 'imagemetrics-lang';
+
 /** @type {Translations} */
 let translations = {};
+
+/**
+ * Read the user's stored language preference, falling back to Arabic.
+ * @returns {Lang}
+ */
+export function getStoredLang() {
+  try {
+    const value = localStorage.getItem(STORAGE_KEY);
+    return value === 'en' || value === 'ar' ? value : 'ar';
+  } catch {
+    return 'ar';
+  }
+}
 
 /**
  * Fetch a locale JSON file and apply translations to the DOM.
@@ -18,6 +33,11 @@ export async function loadLocale(lang) {
   }
   translations = await res.json();
   setState({ lang });
+  try {
+    localStorage.setItem(STORAGE_KEY, lang);
+  } catch {
+    // Ignore storage failures; the active language still applies in-page.
+  }
   applyTranslations();
 }
 

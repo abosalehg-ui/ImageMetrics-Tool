@@ -13,7 +13,11 @@
                 <h1 data-i18n="mainTitle">ImageMetrics Tool</h1>
                 <p data-i18n="subtitle">أداة قياسات الصور - قياس الإحداثيات والمسافات بدقة</p>
             </div>
-            <button class="lang-switch" data-i18n-aria="ariaLangSwitch">English</button>
+            <div class="header-actions">
+                <button class="icon-btn" id="btnTheme" type="button" data-i18n-aria="ariaTheme">🌙</button>
+                <button class="icon-btn" id="btnHelp" type="button" data-i18n-aria="ariaHelp">⌨️</button>
+                <button class="lang-switch" data-i18n-aria="ariaLangSwitch">English</button>
+            </div>
         </header>
 
         <div class="main-content">
@@ -43,6 +47,8 @@
 
                 <div class="controls" role="toolbar">
                     <button class="btn-primary" id="btnNewImage" data-i18n="btnNewImage" data-i18n-aria="ariaNewImage">📁 صورة جديدة</button>
+                    <button class="btn-secondary" id="btnUndo" data-i18n="btnUndo" data-i18n-aria="ariaUndo" disabled>↶ تراجع</button>
+                    <button class="btn-secondary" id="btnRedo" data-i18n="btnRedo" data-i18n-aria="ariaRedo" disabled>↷ إعادة</button>
                     <button class="btn-primary" id="btnExport" data-i18n="btnExport" data-i18n-aria="ariaExport">💾 تصدير CSV</button>
                     <button class="btn-danger" id="btnClear" data-i18n="btnClear" data-i18n-aria="ariaClear">🗑️ مسح الكل</button>
 
@@ -98,6 +104,22 @@
         <div class="footer">
             <p>تطوير: عبدالكريم العبود | <a href="mailto:abo.saleh.g@gmail.com">abo.saleh.g@gmail.com</a></p>
             <p>© 2024 ImageMetrics Tool - All Rights Reserved</p>
+        </div>
+    </div>
+
+    <div class="shortcuts-help" id="shortcutsHelp" role="dialog" aria-modal="false">
+        <div class="shortcuts-help-box">
+            <h3 data-i18n="shortcutsTitle">⌨️ اختصارات لوحة المفاتيح</h3>
+            <ul class="shortcuts-list">
+                <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> <span data-i18n="scUndo">تراجع</span></li>
+                <li><kbd>Ctrl</kbd>+<kbd>Y</kbd> <span data-i18n="scRedo">إعادة</span></li>
+                <li><kbd>Ctrl</kbd>+<kbd>S</kbd> <span data-i18n="scExport">تصدير CSV</span></li>
+                <li><kbd>Delete</kbd> <span data-i18n="scDelete">حذف آخر نقطة</span></li>
+                <li><kbd>G</kbd> <span data-i18n="scGrid">إظهار/إخفاء الشبكة</span></li>
+                <li><kbd>D</kbd> <span data-i18n="scTheme">الوضع الليلي</span></li>
+                <li><kbd>+</kbd> / <kbd>-</kbd> <span data-i18n="scZoom">تكبير/تصغير</span></li>
+                <li><kbd>?</kbd> <span data-i18n="scHelp">إظهار هذه القائمة</span></li>
+            </ul>
         </div>
     </div>
 

@@ -50,8 +50,27 @@
   --dur-base: 180ms;
 }
 
+/* Dark theme tokens. Applied either by explicit user opt-in
+   (html[data-theme='dark']) or, when no explicit choice is stored, by the
+   system preference. html[data-theme='light'] always keeps the light defaults. */
+:root[data-theme='dark'] {
+  --color-bg: #0c0a09;
+  --color-surface: #1c1917;
+  --color-surface-alt: #292524;
+  --color-border: #292524;
+  --color-border-strong: #44403c;
+  --color-text: #fafaf9;
+  --color-text-muted: #a8a29e;
+  --color-text-subtle: #78716c;
+  --color-primary-soft: #2a1c14;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --color-bg: #0c0a09;
     --color-surface: #1c1917;
     --color-surface-alt: #292524;
@@ -823,8 +842,107 @@ canvas.dragging {
   transition: background var(--dur-fast) var(--ease);
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover:not(:disabled) {
   background: var(--color-border);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ===== Header actions (theme / help / language) ===== */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  font-size: 16px;
+  line-height: 1;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.icon-btn:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+/* ===== Keyboard shortcuts help ===== */
+
+.shortcuts-help {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(28, 25, 23, 0.45);
+}
+
+.shortcuts-help.open {
+  display: flex;
+}
+
+.shortcuts-help-box {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 24px;
+}
+
+.shortcuts-help-box h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+}
+
+.shortcuts-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shortcuts-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+kbd {
+  display: inline-block;
+  min-width: 22px;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: center;
+  color: var(--color-text);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3,8 +3,28 @@ import { t } from './i18n.js';
 import { renderCanvas } from './canvas.js';
 import { distance } from './measurements.js';
 import { confirmDialog } from './ui/dialog.js';
+import { pushHistory, undoHistory, redoHistory, canUndo, canRedo } from './history.js';
 
 /** @typedef {import('./types.d.ts').Point} Point */
+
+/**
+ * Commit a new points array, recording the previous state for undo and
+ * refreshing every dependent view.
+ * @param {Point[]} newPoints
+ */
+function commitPoints(newPoints) {
+  pushHistory(store.points);
+  setState({ points: newPoints });
+  refreshPointsUI();
+}
+
+/** Re-render the canvas and all point-derived UI in one place. */
+export function refreshPointsUI() {
+  renderCanvas();
+  updatePointsList();
+  updateDistanceDisplay();
+  updateHistoryButtons();
+}
 
 /**
  * @param {number} x
@@ -12,20 +32,15 @@ import { confirmDialog } from './ui/dialog.js';
  * @param {string} color
  */
 export function addPoint(x, y, color) {
-  setState({ points: [...store.points, { x, y, color }] });
-  renderCanvas();
-  updatePointsList();
-  updateDistanceDisplay();
+  commitPoints([...store.points, { x, y, color }]);
 }
 
 /** @param {number} idx */
 export function deletePoint(idx) {
+  if (idx < 0 || idx >= store.points.length) return;
   const newPoints = [...store.points];
   newPoints.splice(idx, 1);
-  setState({ points: newPoints });
-  renderCanvas();
-  updatePointsList();
-  updateDistanceDisplay();
+  commitPoints(newPoints);
 }
 
 export async function clearAllPoints() {
@@ -35,11 +50,31 @@ export async function clearAllPoints() {
     cancelText: t('btnCancel'),
   });
   if (!confirmed) return;
-  setState({ points: [] });
-  renderCanvas();
-  updatePointsList();
-  const displayEl = document.getElementById('distanceDisplay');
-  if (displayEl) displayEl.classList.remove('active');
+  commitPoints([]);
+}
+
+/** Restore the previous points snapshot, if any. */
+export function undo() {
+  const prev = undoHistory(store.points);
+  if (prev === null) return;
+  setState({ points: prev });
+  refreshPointsUI();
+}
+
+/** Re-apply the next points snapshot, if any. */
+export function redo() {
+  const next = redoHistory(store.points);
+  if (next === null) return;
+  setState({ points: next });
+  refreshPointsUI();
+}
+
+/** Sync the undo/redo buttons' disabled state with the history stacks. */
+export function updateHistoryButtons() {
+  const undoBtn = /** @type {HTMLButtonElement | null} */ (document.getElementById('btnUndo'));
+  const redoBtn = /** @type {HTMLButtonElement | null} */ (document.getElementById('btnRedo'));
+  if (undoBtn) undoBtn.disabled = !canUndo();
+  if (redoBtn) redoBtn.disabled = !canRedo();
 }
 
 export function updatePointsList() {

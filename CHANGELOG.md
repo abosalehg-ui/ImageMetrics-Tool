@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — أُضيف (المرحلة 2: ميزات UX الأساسية / Phase 2: Core UX Features)
+- **تراجع/إعادة (Undo/Redo)** لطفرات النقاط عبر `js/history.js` (مكدّسا past/future بلقطات غير قابلة للتغيير)، مع أزرار في الشريط وحالة تعطيل تلقائية. تحميل صورة جديدة يصفّر التاريخ.
+- **الوضع الليلي بتبديل يدوي** (`js/theme.js`): زر يكتب `data-theme` على `<html>` ويحفظ التفضيل في `localStorage`، مع احترام `prefers-color-scheme` عند غياب اختيار صريح.
+- **اختصارات لوحة المفاتيح** (`js/shortcuts.js`): `Ctrl+Z/Y` تراجع/إعادة، `Ctrl+S` تصدير، `Delete` حذف آخر نقطة، `G` الشبكة، `D` الوضع الليلي، `+/-` تكبير/تصغير، `?` لوحة المساعدة. + لوحة مساعدة منبثقة.
+- **حفظ تفضيل اللغة** في `localStorage` (`getStoredLang`) — يبدأ التطبيق باللغة المختارة سابقًا.
+- وحدة `js/controls.js` موحّدة (`setGrid`/`toggleGrid`/`setZoom`/`zoomBy`/`clampZoom`) يستخدمها كلٌّ من عناصر الواجهة واختصارات لوحة المفاتيح (إزالة ازدواج المنطق).
+- اختبارات وحدة جديدة لـ `history` و `clampZoom`، واختبارات E2E للتراجع/الإعادة والوضع الليلي ولوحة المساعدة.
+
 ### Added — أُضيف (المرحلة 1: المتانة والأساس / Phase 1: Robustness & Foundation)
 - نظام **Toast** إشعارات غير معطِّل (`js/ui/toast.js`) مع منطقة `aria-live` للقارئات.
 - مربع حوار تأكيد **Dialog** نمطي يدعم لوحة المفاتيح (`js/ui/dialog.js`) بدل `confirm()` الأصلي.

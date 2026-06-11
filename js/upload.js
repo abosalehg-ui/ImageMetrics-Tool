@@ -1,6 +1,7 @@
 import { setState } from './state.js';
 import { renderCanvas, getCanvas } from './canvas.js';
-import { updatePointsList } from './points.js';
+import { updatePointsList, updateHistoryButtons } from './points.js';
+import { resetHistory } from './history.js';
 import { t } from './i18n.js';
 import { showToast } from './ui/toast.js';
 
@@ -78,12 +79,14 @@ export function loadImage(file) {
       canvas.height = img.height;
       document.getElementById('canvasContainer')?.classList.add('active');
       setState({ img, points: [], zoom: 1 });
+      resetHistory();
       const slider = /** @type {HTMLInputElement | null} */ (document.getElementById('zoomSlider'));
       if (slider) slider.value = '100';
       const zoomValue = document.getElementById('zoomValue');
       if (zoomValue) zoomValue.textContent = '100%';
       renderCanvas();
       updatePointsList();
+      updateHistoryButtons();
       document.getElementById('distanceDisplay')?.classList.remove('active');
     };
     img.src = result;

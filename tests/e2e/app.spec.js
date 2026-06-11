@@ -151,3 +151,66 @@ test.describe('CSV export', () => {
     );
   });
 });
+
+test.describe('undo / redo', () => {
+  test('undo and redo via toolbar buttons', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page);
+
+    const canvas = page.locator('#mainCanvas');
+    const undoBtn = page.locator('#btnUndo');
+    const redoBtn = page.locator('#btnRedo');
+
+    await expect(undoBtn).toBeDisabled();
+
+    await canvas.click({ position: { x: 10, y: 10 } });
+    await canvas.click({ position: { x: 40, y: 50 } });
+    await expect(page.locator('.point-item')).toHaveCount(2);
+    await expect(undoBtn).toBeEnabled();
+
+    await undoBtn.click();
+    await expect(page.locator('.point-item')).toHaveCount(1);
+    await expect(redoBtn).toBeEnabled();
+
+    await undoBtn.click();
+    await expect(page.locator('.point-item')).toHaveCount(0);
+    await expect(undoBtn).toBeDisabled();
+
+    await redoBtn.click();
+    await expect(page.locator('.point-item')).toHaveCount(1);
+  });
+
+  test('undo via Ctrl+Z keyboard shortcut', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page);
+
+    const canvas = page.locator('#mainCanvas');
+    await canvas.click({ position: { x: 10, y: 10 } });
+    await canvas.click({ position: { x: 40, y: 50 } });
+    await expect(page.locator('.point-item')).toHaveCount(2);
+
+    await page.keyboard.press('Control+z');
+    await expect(page.locator('.point-item')).toHaveCount(1);
+  });
+});
+
+test.describe('theme', () => {
+  test('toggles dark mode and persists the choice', async ({ page }) => {
+    await page.goto('/');
+    await page.click('#btnTheme');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', /light|dark/);
+
+    const theme = await page.getAttribute('html', 'data-theme');
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+  });
+});
+
+test.describe('keyboard shortcuts help', () => {
+  test('opens the shortcuts panel', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#shortcutsHelp')).not.toHaveClass(/open/);
+    await page.click('#btnHelp');
+    await expect(page.locator('#shortcutsHelp')).toHaveClass(/open/);
+  });
+});
