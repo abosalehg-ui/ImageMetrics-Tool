@@ -36,5 +36,20 @@
   "ariaNewImage": "Upload a new image",
   "ariaExport": "Export points to CSV file",
   "ariaClear": "Clear all points",
-  "ariaZoom": "Zoom level"
+  "ariaZoom": "Zoom level",
+  "btnUndo": "↶ Undo",
+  "btnRedo": "↷ Redo",
+  "ariaUndo": "Undo last action",
+  "ariaRedo": "Redo action",
+  "ariaTheme": "Toggle dark mode",
+  "ariaHelp": "Show keyboard shortcuts",
+  "shortcutsTitle": "⌨️ Keyboard Shortcuts",
+  "scUndo": "Undo",
+  "scRedo": "Redo",
+  "scExport": "Export CSV",
+  "scDelete": "Delete last point",
+  "scGrid": "Toggle grid",
+  "scTheme": "Dark mode",
+  "scZoom": "Zoom in/out",
+  "scHelp": "Show this panel"
 }

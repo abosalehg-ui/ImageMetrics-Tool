@@ -355,16 +355,16 @@ copies or substantial portions of the Software.
 ## 🌟 الميزات المستقبلية
 
 - [x] ~~وضع الليل (Dark Mode)~~ ✅ *مُنفّذ في v2.0.0 (تلقائي)*
-- [ ] زر تبديل يدوي للوضع الليلي مع حفظ التفضيل
+- [x] ~~زر تبديل يدوي للوضع الليلي مع حفظ التفضيل~~ ✅ *المرحلة 2*
+- [x] ~~التراجع عن آخر عملية (Undo/Redo)~~ ✅ *المرحلة 2*
+- [x] ~~اختصارات لوحة المفاتيح~~ ✅ *المرحلة 2*
 - [ ] حفظ المشروع بالكامل (LocalStorage / JSON)
-- [ ] التراجع عن آخر عملية (Undo/Redo)
 - [ ] رسم خطوط وأشكال
 - [ ] قياس الزوايا
 - [ ] قياس المساحات (مضلعات)
 - [ ] المعايرة بوحدات حقيقية (سم/بوصة)
 - [ ] دعم ملفات PDF
 - [ ] طباعة النتائج
-- [ ] اختصارات لوحة المفاتيح
 - [ ] PWA (تثبيت + عمل دون اتصال)
 
 > راجع [`IMPROVEMENTS.md`](./IMPROVEMENTS.md) لكتالوج شامل بأفكار التطوير.
@@ -631,16 +631,16 @@ This tool is open source under MIT License.
 ## 🌟 Future Features
 
 - [x] ~~Dark Mode~~ ✅ *Shipped in v2.0.0 (automatic)*
-- [ ] Manual dark-mode toggle with preference persistence
+- [x] ~~Manual dark-mode toggle with preference persistence~~ ✅ *Phase 2*
+- [x] ~~Undo/Redo last operation~~ ✅ *Phase 2*
+- [x] ~~Keyboard shortcuts~~ ✅ *Phase 2*
 - [ ] Save entire project (LocalStorage / JSON)
-- [ ] Undo/Redo last operation
 - [ ] Draw lines and shapes
 - [ ] Measure angles
 - [ ] Measure areas (polygons)
 - [ ] Real-world unit calibration (cm / inch)
 - [ ] PDF file support
 - [ ] Print results
-- [ ] Keyboard shortcuts
 - [ ] PWA (installable + offline)
 
 > See [`IMPROVEMENTS.md`](./IMPROVEMENTS.md) for the comprehensive idea catalog.
