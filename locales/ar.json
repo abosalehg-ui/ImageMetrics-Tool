@@ -23,5 +23,18 @@
   "distanceLabel": "المسافة:",
   "point": "نقطة",
   "confirmClearAll": "هل تريد حذف جميع النقاط؟",
-  "noPointsToExport": "لا توجد نقاط لتصديرها"
+  "noPointsToExport": "لا توجد نقاط لتصديرها",
+  "btnConfirm": "تأكيد",
+  "btnCancel": "إلغاء",
+  "exportSuccess": "تم تصدير النقاط بنجاح",
+  "errorNotImage": "الملف المختار ليس صورة",
+  "errorFileTooLarge": "حجم الصورة كبير جدًا (الحد الأقصى 25 ميجابايت)",
+  "errorReadFailed": "تعذّرت قراءة الملف",
+  "errorImageDecode": "تعذّر تحميل الصورة، قد تكون تالفة",
+  "ariaCanvas": "لوحة الصورة - انقر لإضافة نقطة قياس",
+  "ariaLangSwitch": "تبديل اللغة",
+  "ariaNewImage": "رفع صورة جديدة",
+  "ariaExport": "تصدير النقاط إلى ملف CSV",
+  "ariaClear": "مسح جميع النقاط",
+  "ariaZoom": "مستوى التكبير"
 }

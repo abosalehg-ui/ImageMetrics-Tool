@@ -55,6 +55,11 @@ function applyTranslations() {
     if (key) el.textContent = t(key);
   });
 
+  document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+    const key = /** @type {HTMLElement} */ (el).dataset.i18nAria;
+    if (key) el.setAttribute('aria-label', t(key));
+  });
+
   const instrList = document.getElementById('instrList');
   if (instrList) {
     instrList.innerHTML = '';

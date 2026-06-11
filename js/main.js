@@ -23,7 +23,9 @@ document.getElementById('btnNewImage')?.addEventListener('click', () => {
 });
 
 document.getElementById('btnExport')?.addEventListener('click', exportToCSV);
-document.getElementById('btnClear')?.addEventListener('click', clearAllPoints);
+document.getElementById('btnClear')?.addEventListener('click', () => {
+  clearAllPoints().catch((err) => console.error('Failed to clear points:', err));
+});
 
 document.getElementById('gridToggle')?.addEventListener('change', (e) => {
   const target = /** @type {HTMLInputElement} */ (e.target);

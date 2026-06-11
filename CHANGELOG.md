@@ -12,6 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — أُضيف (المرحلة 1: المتانة والأساس / Phase 1: Robustness & Foundation)
+- نظام **Toast** إشعارات غير معطِّل (`js/ui/toast.js`) مع منطقة `aria-live` للقارئات.
+- مربع حوار تأكيد **Dialog** نمطي يدعم لوحة المفاتيح (`js/ui/dialog.js`) بدل `confirm()` الأصلي.
+- معالجة أخطاء تحميل الصور: `img.onerror`، `reader.onerror`، والتحقق من نوع الملف وحجمه (حد 25MB) في `js/upload.js` مع دالة `validateImageFile`.
+- تهريب حقول CSV وفق RFC 4180 (`escapeCsvField`) واسم ملف بطابع زمني (`timestampSlug`) في `js/export.js`.
+- أدوات `throttle` / `rafThrottle` (`js/utils/throttle.js`) لتقليل استدعاءات `getImageData` على حركة الفأرة.
+- سمات إمكانية الوصول (ARIA): `role`/`aria-label` للأزرار والكانفس، و `aria-live` للإحداثيات الحية، ودعم `data-i18n-aria` في نظام الترجمة.
+- اختبارات وحدة جديدة لـ `escapeCsvField` و `timestampSlug` و `throttle`/`rafThrottle`.
+
+### Changed — تغيّر (المرحلة 1)
+- استُبدلت نداءات `alert()`/`confirm()` الخام بنظام Toast/Dialog.
+- يقرأ مدخل الملف نوع الصورة الآن (سابقًا كان الفحص في drop فقط).
+
 ### Added — أُضيف (المرحلة 6)
 - نهج **TypeScript تدريجي عبر JSDoc** بدون تغيير امتدادات الملفات أو إضافة build step:
   - `tsconfig.json` بـ `allowJs: true`, `checkJs: true`, `noEmit: true`, `strict: true`.
