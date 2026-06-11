@@ -87,8 +87,8 @@ test.describe('point measurement', () => {
     await canvas.click({ position: { x: 40, y: 50 } });
     await expect(page.locator('.point-item')).toHaveCount(2);
 
-    page.once('dialog', (dialog) => dialog.accept());
     await page.click('#btnClear');
+    await page.locator('.dialog-box .btn-danger').click();
     await expect(page.locator('.point-item')).toHaveCount(0);
     await expect(page.locator('#distanceDisplay')).not.toHaveClass(/active/);
   });
@@ -101,8 +101,8 @@ test.describe('point measurement', () => {
     await canvas.click({ position: { x: 10, y: 10 } });
     await canvas.click({ position: { x: 40, y: 50 } });
 
-    page.once('dialog', (dialog) => dialog.dismiss());
     await page.click('#btnClear');
+    await page.locator('.dialog-box .btn-secondary').click();
     await expect(page.locator('.point-item')).toHaveCount(2);
   });
 });
@@ -146,6 +146,8 @@ test.describe('CSV export', () => {
     await page.click('#btnExport');
     const download = await downloadPromise;
 
-    expect(download.suggestedFilename()).toBe('image_coordinates.csv');
+    expect(download.suggestedFilename()).toMatch(
+      /^image_coordinates_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.csv$/
+    );
   });
 });

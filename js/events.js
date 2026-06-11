@@ -1,6 +1,7 @@
 import { store, setState } from './state.js';
 import { getContext, getCanvas } from './canvas.js';
 import { rgbToHex } from './utils/color.js';
+import { rafThrottle } from './utils/throttle.js';
 import { addPoint } from './points.js';
 
 let startX = 0;
@@ -43,19 +44,19 @@ export function setupCanvasEvents() {
     }
   });
 
-  canvas.addEventListener('mousemove', (e) => {
-    if (!store.img || store.isDragging) return;
-    const rect = canvas.getBoundingClientRect();
+  // getImageData + DOM writes are expensive, so coalesce them to one update per
+  // animation frame instead of running on every mousemove event.
+  const updateLiveReadout = rafThrottle((/** @type {number} */ px, /** @type {number} */ py) => {
     const { zoom } = store;
-    const x = Math.round((e.clientX - rect.left) / zoom);
-    const y = Math.round((e.clientY - rect.top) / zoom);
+    const x = Math.round(px / zoom);
+    const y = Math.round(py / zoom);
 
     const liveX = document.getElementById('liveX');
     const liveY = document.getElementById('liveY');
     if (liveX) liveX.textContent = String(x);
     if (liveY) liveY.textContent = String(y);
 
-    const imgData = ctx.getImageData(e.clientX - rect.left, e.clientY - rect.top, 1, 1);
+    const imgData = ctx.getImageData(px, py, 1, 1);
     const [r, g, b] = imgData.data;
     const hex = rgbToHex(r, g, b);
     const liveRGB = document.getElementById('liveRGB');
@@ -64,6 +65,12 @@ export function setupCanvasEvents() {
     if (liveRGB) liveRGB.textContent = `rgb(${r}, ${g}, ${b})`;
     if (liveHEX) liveHEX.textContent = hex;
     if (preview) preview.style.background = hex;
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (!store.img || store.isDragging) return;
+    const rect = canvas.getBoundingClientRect();
+    updateLiveReadout(e.clientX - rect.left, e.clientY - rect.top);
   });
 
   canvas.addEventListener('click', (e) => {

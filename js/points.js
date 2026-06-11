@@ -2,6 +2,7 @@ import { store, setState } from './state.js';
 import { t } from './i18n.js';
 import { renderCanvas } from './canvas.js';
 import { distance } from './measurements.js';
+import { confirmDialog } from './ui/dialog.js';
 
 /** @typedef {import('./types.d.ts').Point} Point */
 
@@ -27,14 +28,18 @@ export function deletePoint(idx) {
   updateDistanceDisplay();
 }
 
-export function clearAllPoints() {
-  if (confirm(t('confirmClearAll'))) {
-    setState({ points: [] });
-    renderCanvas();
-    updatePointsList();
-    const displayEl = document.getElementById('distanceDisplay');
-    if (displayEl) displayEl.classList.remove('active');
-  }
+export async function clearAllPoints() {
+  if (store.points.length === 0) return;
+  const confirmed = await confirmDialog(t('confirmClearAll'), {
+    confirmText: t('btnConfirm'),
+    cancelText: t('btnCancel'),
+  });
+  if (!confirmed) return;
+  setState({ points: [] });
+  renderCanvas();
+  updatePointsList();
+  const displayEl = document.getElementById('distanceDisplay');
+  if (displayEl) displayEl.classList.remove('active');
 }
 
 export function updatePointsList() {

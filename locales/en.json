@@ -23,5 +23,18 @@
   "distanceLabel": "Distance:",
   "point": "Point",
   "confirmClearAll": "Delete all points?",
-  "noPointsToExport": "No points to export"
+  "noPointsToExport": "No points to export",
+  "btnConfirm": "Confirm",
+  "btnCancel": "Cancel",
+  "exportSuccess": "Points exported successfully",
+  "errorNotImage": "The selected file is not an image",
+  "errorFileTooLarge": "Image is too large (max 25 MB)",
+  "errorReadFailed": "Failed to read the file",
+  "errorImageDecode": "Could not load the image, it may be corrupted",
+  "ariaCanvas": "Image canvas - click to add a measurement point",
+  "ariaLangSwitch": "Switch language",
+  "ariaNewImage": "Upload a new image",
+  "ariaExport": "Export points to CSV file",
+  "ariaClear": "Clear all points",
+  "ariaZoom": "Zoom level"
 }
