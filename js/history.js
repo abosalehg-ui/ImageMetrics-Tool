@@ -6,6 +6,9 @@
  * respect to the DOM — callers apply the returned snapshots to the store.
  */
 
+/** Maximum snapshots kept per stack, to bound memory on very long sessions. */
+export const MAX_HISTORY = 100;
+
 /** @type {Point[][]} */
 let past = [];
 /** @type {Point[][]} */
@@ -13,11 +16,13 @@ let future = [];
 
 /**
  * Record the current points as a restore point before a mutation. Clears the
- * redo stack, since a new action invalidates any redo branch.
+ * redo stack, since a new action invalidates any redo branch. Drops the
+ * oldest snapshot once past MAX_HISTORY entries.
  * @param {Point[]} snapshot current points, before the change
  */
 export function pushHistory(snapshot) {
   past.push([...snapshot]);
+  if (past.length > MAX_HISTORY) past.shift();
   future = [];
 }
 

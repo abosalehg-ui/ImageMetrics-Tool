@@ -1,6 +1,6 @@
 import { store, setState } from './state.js';
 import { getContext, getCanvas } from './canvas.js';
-import { rgbToHex } from './utils/color.js';
+import { getPixelColor } from './utils/color.js';
 import { rafThrottle } from './utils/throttle.js';
 import { addPoint } from './points.js';
 
@@ -56,13 +56,11 @@ export function setupCanvasEvents() {
     if (liveX) liveX.textContent = String(x);
     if (liveY) liveY.textContent = String(y);
 
-    const imgData = ctx.getImageData(px, py, 1, 1);
-    const [r, g, b] = imgData.data;
-    const hex = rgbToHex(r, g, b);
+    const { rgb, hex } = getPixelColor(ctx, px, py);
     const liveRGB = document.getElementById('liveRGB');
     const liveHEX = document.getElementById('liveHEX');
     const preview = document.getElementById('colorPreview');
-    if (liveRGB) liveRGB.textContent = `rgb(${r}, ${g}, ${b})`;
+    if (liveRGB) liveRGB.textContent = rgb;
     if (liveHEX) liveHEX.textContent = hex;
     if (preview) preview.style.background = hex;
   });
@@ -80,8 +78,7 @@ export function setupCanvasEvents() {
     const x = Math.round((e.clientX - rect.left) / zoom);
     const y = Math.round((e.clientY - rect.top) / zoom);
 
-    const imgData = ctx.getImageData(e.clientX - rect.left, e.clientY - rect.top, 1, 1);
-    const [r, g, b] = imgData.data;
-    addPoint(x, y, rgbToHex(r, g, b));
+    const { hex } = getPixelColor(ctx, e.clientX - rect.left, e.clientY - rect.top);
+    addPoint(x, y, hex);
   });
 }

@@ -1,3 +1,5 @@
+import { trapTabKey } from './focusTrap.js';
+
 /**
  * Show a modal confirmation dialog and resolve with the user's choice. Replaces
  * the native blocking `confirm()` with an accessible, styleable overlay that
@@ -55,8 +57,13 @@ export function confirmDialog(message, options = {}) {
 
     /** @param {KeyboardEvent} e */
     const onKey = (e) => {
-      if (e.key === 'Escape') close(false);
-      else if (e.key === 'Enter') close(true);
+      if (e.key === 'Escape') {
+        close(false);
+      } else if (e.key === 'Enter') {
+        close(true);
+      } else {
+        trapTabKey(e, box);
+      }
     };
 
     cancelBtn.addEventListener('click', () => close(false));

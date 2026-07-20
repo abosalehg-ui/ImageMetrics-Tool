@@ -18,8 +18,8 @@
 <!-- كيف تم اختبار هذه التغييرات؟ -->
 <!-- How were these changes tested? -->
 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
 
 ## لقطات شاشة | Screenshots
 

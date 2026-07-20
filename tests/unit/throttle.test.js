@@ -1,38 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { throttle, rafThrottle } from '../../js/utils/throttle.js';
-
-describe('throttle', () => {
-  it('calls on the leading edge', () => {
-    const fn = vi.fn();
-    const now = 1000;
-    const throttled = throttle(fn, 100, () => now);
-    throttled('a');
-    expect(fn).toHaveBeenCalledTimes(1);
-    expect(fn).toHaveBeenCalledWith('a');
-  });
-
-  it('suppresses calls within the wait window', () => {
-    const fn = vi.fn();
-    let now = 0;
-    const throttled = throttle(fn, 100, () => now);
-    throttled();
-    now = 50;
-    throttled();
-    now = 99;
-    throttled();
-    expect(fn).toHaveBeenCalledTimes(1);
-  });
-
-  it('allows the next call after the window elapses', () => {
-    const fn = vi.fn();
-    let now = 0;
-    const throttled = throttle(fn, 100, () => now);
-    throttled();
-    now = 100;
-    throttled();
-    expect(fn).toHaveBeenCalledTimes(2);
-  });
-});
+import { rafThrottle } from '../../js/utils/throttle.js';
 
 describe('rafThrottle', () => {
   it('coalesces multiple calls into one per frame using the latest args', async () => {

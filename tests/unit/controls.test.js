@@ -7,7 +7,7 @@ describe('clampZoom', () => {
   });
 
   it('clamps below the minimum', () => {
-    expect(clampZoom(50)).toBe(ZOOM_MIN);
+    expect(clampZoom(10)).toBe(ZOOM_MIN);
   });
 
   it('clamps above the maximum', () => {

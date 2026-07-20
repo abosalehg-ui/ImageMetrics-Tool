@@ -1,7 +1,7 @@
 import { setState } from './state.js';
-import { renderCanvas, getCanvas } from './canvas.js';
-import { updatePointsList, updateHistoryButtons } from './points.js';
+import { updatePointsList, updateDistanceDisplay, updateHistoryButtons } from './points.js';
 import { resetHistory } from './history.js';
+import { setZoom, resetZoomCapWarning } from './controls.js';
 import { t } from './i18n.js';
 import { showToast } from './ui/toast.js';
 
@@ -63,33 +63,35 @@ export function loadImage(file) {
     return;
   }
 
-  const reader = new FileReader();
-  reader.onerror = () => showToast(t('errorReadFailed'), 'error');
-  reader.onload = (e) => {
-    const result = e.target?.result;
-    if (typeof result !== 'string') {
-      showToast(t('errorReadFailed'), 'error');
+  // An object URL avoids base64-inflating the file into a ~33% larger string
+  // held in memory for the whole session (what FileReader.readAsDataURL did).
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+
+  img.onerror = () => {
+    URL.revokeObjectURL(url);
+    showToast(t('errorImageDecode'), 'error');
+  };
+
+  img.onload = () => {
+    URL.revokeObjectURL(url);
+
+    // A malformed/dimensionless SVG decodes "successfully" but yields a
+    // zero-size image, which would otherwise produce a silently blank canvas.
+    if (img.width === 0 || img.height === 0) {
+      showToast(t('errorZeroDimension'), 'error');
       return;
     }
-    const img = new Image();
-    img.onerror = () => showToast(t('errorImageDecode'), 'error');
-    img.onload = () => {
-      const canvas = getCanvas();
-      canvas.width = img.width;
-      canvas.height = img.height;
-      document.getElementById('canvasContainer')?.classList.add('active');
-      setState({ img, points: [], zoom: 1 });
-      resetHistory();
-      const slider = /** @type {HTMLInputElement | null} */ (document.getElementById('zoomSlider'));
-      if (slider) slider.value = '100';
-      const zoomValue = document.getElementById('zoomValue');
-      if (zoomValue) zoomValue.textContent = '100%';
-      renderCanvas();
-      updatePointsList();
-      updateHistoryButtons();
-      document.getElementById('distanceDisplay')?.classList.remove('active');
-    };
-    img.src = result;
+
+    document.getElementById('canvasContainer')?.classList.add('active');
+    setState({ img, points: [] });
+    resetHistory();
+    resetZoomCapWarning();
+    setZoom(100);
+    updatePointsList();
+    updateDistanceDisplay();
+    updateHistoryButtons();
   };
-  reader.readAsDataURL(file);
+
+  img.src = url;
 }

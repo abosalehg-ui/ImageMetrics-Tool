@@ -82,23 +82,38 @@ export function updatePointsList() {
   if (!list) return;
   const { points } = store;
 
+  list.innerHTML = '';
+
   if (points.length === 0) {
-    list.innerHTML = `<p style="text-align:center;color:#999;">${t('noPoints')}</p>`;
+    const empty = document.createElement('p');
+    empty.textContent = t('noPoints');
+    list.appendChild(empty);
     return;
   }
 
-  list.innerHTML = '';
   points.forEach((point, idx) => {
     const div = document.createElement('div');
     div.className = 'point-item';
-    div.innerHTML = `
-      <div>
-        <strong>${t('point')} ${idx + 1}</strong><br>
-        X: ${point.x}, Y: ${point.y}<br>
-        <small>${point.color}</small>
-      </div>
-      <button class="delete-point" data-index="${idx}">❌</button>
-    `;
+
+    const info = document.createElement('div');
+    const strong = document.createElement('strong');
+    strong.textContent = `${t('point')} ${idx + 1}`;
+    const small = document.createElement('small');
+    small.textContent = point.color;
+    info.append(
+      strong,
+      document.createElement('br'),
+      document.createTextNode(`X: ${point.x}, Y: ${point.y}`),
+      document.createElement('br'),
+      small
+    );
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-point';
+    deleteBtn.dataset.index = String(idx);
+    deleteBtn.textContent = '❌';
+
+    div.append(info, deleteBtn);
     list.appendChild(div);
   });
 }

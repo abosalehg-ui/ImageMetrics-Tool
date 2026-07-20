@@ -1,6 +1,6 @@
 {
   "name": "imagemetrics-tool",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Web-based image measurement tool for precise pixel-level coordinate, distance, and color analysis",
   "type": "module",
   "private": true,

@@ -1,12 +1,13 @@
 import { initCanvas } from './canvas.js';
 import { setupUploadHandlers } from './upload.js';
 import { setupCanvasEvents } from './events.js';
-import { loadLocale, toggleLanguage, getStoredLang } from './i18n.js';
+import { loadLocale, toggleLanguage, getStoredLang, t } from './i18n.js';
 import { exportToCSV } from './export.js';
 import { clearAllPoints, deletePoint, undo, redo } from './points.js';
 import { setGrid, setZoom } from './controls.js';
 import { initTheme, toggleTheme } from './theme.js';
 import { setupKeyboardShortcuts, toggleShortcutsHelp } from './shortcuts.js';
+import { showToast } from './ui/toast.js';
 
 const mainCanvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById('mainCanvas'));
 if (mainCanvas) initCanvas(mainCanvas);
@@ -16,10 +17,16 @@ setupUploadHandlers();
 setupCanvasEvents();
 setupKeyboardShortcuts();
 
-loadLocale(getStoredLang()).catch((err) => console.error('Failed to load locale:', err));
+loadLocale(getStoredLang()).catch((err) => {
+  console.error('Failed to load locale:', err);
+  showToast(t('errorLocaleLoad'), 'error');
+});
 
 document.querySelector('.lang-switch')?.addEventListener('click', () => {
-  toggleLanguage().catch((err) => console.error('Failed to toggle language:', err));
+  toggleLanguage().catch((err) => {
+    console.error('Failed to toggle language:', err);
+    showToast(t('errorLocaleLoad'), 'error');
+  });
 });
 
 document.getElementById('btnTheme')?.addEventListener('click', toggleTheme);
@@ -49,7 +56,8 @@ document.getElementById('zoomSlider')?.addEventListener('input', (e) => {
 
 document.getElementById('pointsList')?.addEventListener('click', (e) => {
   const target = /** @type {HTMLElement} */ (e.target);
-  if (target.classList.contains('delete-point')) {
-    deletePoint(parseInt(target.dataset.index || '0', 10));
-  }
+  if (!target.classList.contains('delete-point')) return;
+  const index = target.dataset.index;
+  if (index === undefined) return;
+  deletePoint(parseInt(index, 10));
 });

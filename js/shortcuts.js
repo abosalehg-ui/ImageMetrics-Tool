@@ -3,6 +3,10 @@ import { undo, redo, deletePoint } from './points.js';
 import { toggleGrid, zoomBy, ZOOM_STEP } from './controls.js';
 import { exportToCSV } from './export.js';
 import { toggleTheme } from './theme.js';
+import { trapTabKey } from './ui/focusTrap.js';
+
+/** Focus to restore once the shortcuts help panel closes. @type {HTMLElement | null} */
+let previouslyFocused = null;
 
 /**
  * Whether keyboard events should be ignored because the user is typing in a
@@ -52,13 +56,39 @@ export function setupKeyboardShortcuts() {
       closeShortcutsHelp();
     }
   });
+
+  const panel = document.getElementById('shortcutsHelp');
+  panel?.addEventListener('keydown', (e) => trapTabKey(e, panel));
+  panel?.addEventListener('click', (e) => {
+    if (e.target === panel) closeShortcutsHelp();
+  });
+  document.getElementById('btnCloseShortcuts')?.addEventListener('click', closeShortcutsHelp);
 }
 
 function closeShortcutsHelp() {
-  document.getElementById('shortcutsHelp')?.classList.remove('open');
+  const panel = document.getElementById('shortcutsHelp');
+  if (!panel || !panel.classList.contains('open')) return;
+  panel.classList.remove('open');
+  panel.setAttribute('aria-modal', 'false');
+  if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
+    previouslyFocused.focus();
+  }
+  previouslyFocused = null;
 }
 
 /** Toggle the keyboard shortcuts help panel. */
 export function toggleShortcutsHelp() {
-  document.getElementById('shortcutsHelp')?.classList.toggle('open');
+  const panel = document.getElementById('shortcutsHelp');
+  if (!panel) return;
+
+  if (panel.classList.contains('open')) {
+    closeShortcutsHelp();
+    return;
+  }
+
+  previouslyFocused = /** @type {HTMLElement | null} */ (document.activeElement);
+  panel.classList.add('open');
+  panel.setAttribute('aria-modal', 'true');
+  const closeBtn = /** @type {HTMLElement | null} */ (document.getElementById('btnCloseShortcuts'));
+  closeBtn?.focus();
 }

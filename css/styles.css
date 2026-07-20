@@ -911,8 +911,16 @@ canvas.dragging {
   padding: 24px;
 }
 
+.shortcuts-help-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
 .shortcuts-help-box h3 {
-  margin: 0 0 16px;
+  margin: 0;
   font-size: 16px;
 }
 

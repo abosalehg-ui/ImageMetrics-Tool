@@ -13,9 +13,9 @@ assignees: ''
 
 ## خطوات إعادة الإنتاج | Steps to Reproduce
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## السلوك المتوقع | Expected Behavior
 
