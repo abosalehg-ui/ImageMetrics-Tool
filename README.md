@@ -16,6 +16,7 @@
 ---
 
 <a name="arabic"></a>
+
 ## 📋 نظرة عامة
 
 **ImageMetrics Tool** هي أداة ويب متقدمة تتيح لك قياس إحداثيات النقاط (X, Y) في الصور بدقة البكسل، بالإضافة إلى قياس المسافات وتحليل الألوان. الأداة مصممة بواجهة مستخدم عصرية وسهلة الاستخدام مع دعم كامل للغتين العربية والإنجليزية.
@@ -25,33 +26,39 @@
 ## ✨ المميزات الرئيسية
 
 ### 🎯 قياس الإحداثيات
+
 - **عرض مباشر**: إحداثيات X و Y تظهر فورياً عند تحريك الفأرة
 - **حفظ النقاط**: النقر على أي نقطة يحفظ إحداثياتها بشكل دائم
 - **نظام البكسل**: قياسات دقيقة بالبكسل من الزاوية العلوية اليسرى
 
 ### 📏 قياس المسافات
+
 - **قياس تلقائي**: حساب المسافة بين آخر نقطتين محفوظتين
 - **دقة عالية**: نتائج دقيقة بالبكسل
 - **عرض واضح**: المسافة تظهر في لوحة منفصلة
 
 ### 🎨 تحليل الألوان
+
 - **RGB**: قيم اللون بنظام Red-Green-Blue
 - **HEX**: كود اللون بالنظام الست عشري
 - **معاينة مباشرة**: مربع يعرض اللون الفعلي
 
 ### 💾 إدارة البيانات
+
 - **حفظ متعدد**: إمكانية حفظ عدد غير محدود من النقاط
 - **قائمة منظمة**: عرض جميع النقاط مع تفاصيلها
 - **تصدير CSV**: حفظ جميع البيانات في ملف Excel/CSV
 - **حذف مرن**: حذف نقاط فردية أو مسح الكل
 
 ### 🖼️ معالجة الصور
+
 - **رفع متعدد**: اختيار من الجهاز أو السحب والإفلات
 - **تكبير/تصغير**: من 50% إلى 300% للدقة العالية
 - **شبكة مساعدة**: خطوط إرشادية اختيارية
 - **علامات ملونة**: تمييز بصري واضح للنقاط
 
 ### 🌐 واجهة المستخدم
+
 - **ثنائية اللغة**: تبديل فوري بين العربية والإنجليزية
 - **تصميم عصري**: ألوان مستوحاة من Claude AI
 - **سهولة الاستخدام**: واجهة بديهية وواضحة
@@ -62,12 +69,14 @@
 ## 🚀 كيفية الاستخدام
 
 ### 1️⃣ رفع الصورة
+
 ```
 - انقر على منطقة الرفع أو
 - اسحب الصورة وأفلتها في المنطقة المخصصة
 ```
 
 ### 2️⃣ قياس الإحداثيات
+
 ```
 - حرك الفأرة فوق الصورة لرؤية الإحداثيات الحية
 - انقر على أي نقطة لحفظها
@@ -75,12 +84,14 @@
 ```
 
 ### 3️⃣ قياس المسافات
+
 ```
 - احفظ نقطتين على الأقل
 - المسافة بين آخر نقطتين ستظهر تلقائياً
 ```
 
 ### 4️⃣ تصدير البيانات
+
 ```
 - انقر على "تصدير CSV"
 - سيتم تحميل ملف يحتوي على:
@@ -94,21 +105,22 @@
 
 ## 🎮 الأدوات المتاحة
 
-| الأداة | الوظيفة |
-|--------|----------|
-| 📁 **صورة جديدة** | رفع صورة جديدة وإعادة تعيين كل شيء |
-| 💾 **تصدير CSV** | حفظ جميع النقاط في ملف CSV |
-| 🗑️ **مسح الكل** | حذف جميع النقاط المحفوظة |
-| ☑️ **إظهار الشبكة** | تفعيل/إلغاء الخطوط الإرشادية |
-| 🔍 **شريط التكبير** | تكبير أو تصغير الصورة (50%-300%) |
-| 🌐 **تبديل اللغة** | التبديل بين العربية والإنجليزية |
-| ❌ **حذف النقطة** | حذف نقطة واحدة من القائمة |
+| الأداة              | الوظيفة                            |
+| ------------------- | ---------------------------------- |
+| 📁 **صورة جديدة**   | رفع صورة جديدة وإعادة تعيين كل شيء |
+| 💾 **تصدير CSV**    | حفظ جميع النقاط في ملف CSV         |
+| 🗑️ **مسح الكل**     | حذف جميع النقاط المحفوظة           |
+| ☑️ **إظهار الشبكة** | تفعيل/إلغاء الخطوط الإرشادية       |
+| 🔍 **شريط التكبير** | تكبير أو تصغير الصورة (50%-300%)   |
+| 🌐 **تبديل اللغة**  | التبديل بين العربية والإنجليزية    |
+| ❌ **حذف النقطة**   | حذف نقطة واحدة من القائمة          |
 
 ---
 
 ## 📊 البيانات المعروضة
 
 ### لوحة الإحداثيات الحية
+
 - **X**: الإحداثي الأفقي (البكسل)
 - **Y**: الإحداثي العمودي (البكسل)
 - **RGB**: قيم اللون rgb(R, G, B)
@@ -116,12 +128,14 @@
 - **معاينة اللون**: مربع ملون
 
 ### قائمة النقاط المحفوظة
+
 - **رقم النقطة**: ترقيم تلقائي
 - **الإحداثيات**: X و Y
 - **اللون**: كود HEX
 - **زر الحذف**: لحذف النقطة
 
 ### عرض المسافة
+
 - يظهر عند حفظ نقطتين أو أكثر
 - يقيس المسافة بين آخر نقطتين
 - النتيجة بالبكسل
@@ -131,6 +145,7 @@
 ## 💻 المتطلبات التقنية
 
 ### المتصفحات المدعومة
+
 - ✅ Google Chrome (موصى به)
 - ✅ Mozilla Firefox
 - ✅ Microsoft Edge
@@ -138,11 +153,13 @@
 - ✅ Opera
 
 ### الحد الأدنى من المواصفات
+
 - متصفح حديث يدعم HTML5
 - JavaScript مفعّل
 - دعم Canvas API
 
 ### أنواع الصور المدعومة
+
 - ✅ JPG / JPEG
 - ✅ PNG
 - ✅ GIF
@@ -164,6 +181,7 @@ Point,X,Y,Color
 ```
 
 ### أعمدة الملف:
+
 - **Point**: رقم النقطة
 - **X**: الإحداثي الأفقي
 - **Y**: الإحداثي العمودي
@@ -175,39 +193,44 @@ Point,X,Y,Color
 
 الأداة تستخدم نظام ألوان مستوحى من Claude AI:
 
-| العنصر | اللون |
-|--------|--------|
+| العنصر           | اللون             |
+| ---------------- | ----------------- |
 | الخلفية الرئيسية | #f4ebe1 → #e8d5c4 |
-| الترويسة | #d97757 → #cc6244 |
-| الأزرار الرئيسية | #d97757 |
-| الإطارات | #d97757 |
-| الروابط | #d97757 |
+| الترويسة         | #d97757 → #cc6244 |
+| الأزرار الرئيسية | #d97757           |
+| الإطارات         | #d97757           |
+| الروابط          | #d97757           |
 
 ---
 
 ## 🔧 استخدامات عملية
 
 ### 📐 في التصميم الجرافيكي
+
 - قياس المسافات بين العناصر
 - تحديد مواقع النقاط الدقيقة
 - استخراج قيم الألوان
 
 ### 🏗️ في الهندسة
+
 - قياس أبعاد المخططات
 - تحديد إحداثيات نقاط محددة
 - حساب المسافات الدقيقة
 
 ### 🖼️ في معالجة الصور
+
 - تحليل مواقع البكسلات
 - استخراج بيانات الألوان
 - توثيق نقاط الاهتمام
 
 ### 🎓 في التعليم
+
 - شرح نظام الإحداثيات
 - تدريس الهندسة التحليلية
 - تطبيقات الرياضيات البصرية
 
 ### 🔬 في البحث العلمي
+
 - تحليل الصور المجهرية
 - قياس الأبعاد في الصور
 - توثيق البيانات المكانية
@@ -217,18 +240,23 @@ Point,X,Y,Color
 ## 📝 الأسئلة الشائعة
 
 ### ❓ هل تُحفظ صوري على خادم؟
+
 **لا**، جميع العمليات تتم محلياً في متصفحك. لا يتم رفع أي صورة إلى خوادم خارجية.
 
 ### ❓ ما هو الحد الأقصى لحجم الصورة؟
+
 يعتمد على قدرة متصفحك. عادة، يمكن التعامل مع صور حتى 10000×10000 بكسل.
 
 ### ❓ هل يمكنني حفظ عملي؟
+
 نعم، استخدم زر "تصدير CSV" لحفظ جميع النقاط والإحداثيات.
 
 ### ❓ كيف أقيس المسافة بين نقطتين؟
+
 احفظ نقطتين بالنقر عليهما، وستظهر المسافة تلقائياً.
 
 ### ❓ هل الأداة مجانية؟
+
 نعم، الأداة مجانية بالكامل للاستخدام الشخصي والتجاري.
 
 ---
@@ -282,23 +310,7 @@ npm run typecheck        # فحص الأنواع بـ TypeScript (عبر JSDoc)
 
 ## 📄 الترخيص
 
-هذه الأداة مفتوحة المصدر تحت رخصة MIT.
-
-```
-MIT License
-
-Copyright (c) 2024 Abdulkareem Al-Aboud
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-```
+هذه الأداة مفتوحة المصدر تحت رخصة MIT. راجع ملف [`LICENSE`](./LICENSE) للنص الكامل.
 
 ---
 
@@ -325,17 +337,20 @@ copies or substantial portions of the Software.
 > راجع [`CHANGELOG.md`](./CHANGELOG.md) للتفاصيل الكاملة.
 
 ### الإصدار 2.0.0 (2026)
+
 **تحوّل معماري شامل دون أي تغيير في وظائف المستخدم.**
 
 #### ✨ ميزات جديدة للمستخدم
+
 - 🌗 **الوضع الليلي التلقائي** — يتبع إعداد نظام التشغيل عبر `prefers-color-scheme`
 - 🎨 **تصميم احترافي جديد** — نظام tokens موحّد، طباعة محسّنة، تباعد مدروس، وحركات ناعمة
 - 📱 استجابة أفضل على الأجهزة المحمولة
 
 #### 🏗️ تحسينات هندسية (تحت الغطاء)
+
 - 📦 الكود مُقسَّم إلى **10 وحدات ES Modules** (بدلاً من ملف واحد بـ 802 سطر)
 - 🧹 **0 متغيرات عامة** (بدلاً من 13)
-- 🧪 **42 اختباراً آلياً** (31 unit + 11 E2E)
+- 🧪 **70 اختباراً آلياً** (50 unit + 20 E2E)
 - ✅ **100% تغطية** على الدوال الخالصة
 - 🔷 **TypeScript** عبر JSDoc + `tsc --noEmit` (أمان نوعي كامل)
 - 🤖 **CI/CD** على كل PR (ESLint + Prettier + TypeScript + Vitest + Playwright)
@@ -343,6 +358,7 @@ copies or substantial portions of the Software.
 - 🌐 **i18n** عبر `locales/{ar,en}.json` (إضافة لغة = ملف JSON واحد)
 
 ### الإصدار 1.0.0 (2024)
+
 - ✅ إطلاق الإصدار الأول
 - ✅ دعم كامل للغتين العربية والإنجليزية
 - ✅ قياس الإحداثيات والمسافات
@@ -354,10 +370,10 @@ copies or substantial portions of the Software.
 
 ## 🌟 الميزات المستقبلية
 
-- [x] ~~وضع الليل (Dark Mode)~~ ✅ *مُنفّذ في v2.0.0 (تلقائي)*
-- [x] ~~زر تبديل يدوي للوضع الليلي مع حفظ التفضيل~~ ✅ *المرحلة 2*
-- [x] ~~التراجع عن آخر عملية (Undo/Redo)~~ ✅ *المرحلة 2*
-- [x] ~~اختصارات لوحة المفاتيح~~ ✅ *المرحلة 2*
+- [x] ~~وضع الليل (Dark Mode)~~ ✅ _مُنفّذ في v2.0.0 (تلقائي)_
+- [x] ~~زر تبديل يدوي للوضع الليلي مع حفظ التفضيل~~ ✅ _المرحلة 2_
+- [x] ~~التراجع عن آخر عملية (Undo/Redo)~~ ✅ _المرحلة 2_
+- [x] ~~اختصارات لوحة المفاتيح~~ ✅ _المرحلة 2_
 - [ ] حفظ المشروع بالكامل (LocalStorage / JSON)
 - [ ] رسم خطوط وأشكال
 - [ ] قياس الزوايا
@@ -368,7 +384,6 @@ copies or substantial portions of the Software.
 - [ ] PWA (تثبيت + عمل دون اتصال)
 
 > راجع [`IMPROVEMENTS.md`](./IMPROVEMENTS.md) لكتالوج شامل بأفكار التطوير.
-
 
 ---
 
@@ -381,6 +396,7 @@ copies or substantial portions of the Software.
 ---
 
 <a name="english"></a>
+
 # English Documentation
 
 ## 📋 Overview
@@ -392,33 +408,39 @@ copies or substantial portions of the Software.
 ## ✨ Key Features
 
 ### 🎯 Coordinate Measurement
+
 - **Live Display**: X & Y coordinates shown instantly on mouse move
 - **Point Saving**: Click any point to save its coordinates permanently
 - **Pixel System**: Accurate measurements in pixels from top-left corner
 
 ### 📏 Distance Measurement
+
 - **Automatic Calculation**: Distance between last two saved points
 - **High Precision**: Accurate results in pixels
 - **Clear Display**: Distance shown in dedicated panel
 
 ### 🎨 Color Analysis
+
 - **RGB Values**: Red-Green-Blue color system
 - **HEX Code**: Hexadecimal color code
 - **Live Preview**: Color swatch showing actual color
 
 ### 💾 Data Management
+
 - **Multiple Points**: Save unlimited number of points
 - **Organized List**: View all points with details
 - **CSV Export**: Save all data to Excel/CSV file
 - **Flexible Deletion**: Delete individual points or clear all
 
 ### 🖼️ Image Processing
+
 - **Multiple Upload**: Select from device or drag & drop
 - **Zoom**: 50% to 300% for high precision
 - **Grid Helper**: Optional guide lines
 - **Colored Markers**: Clear visual point identification
 
 ### 🌐 User Interface
+
 - **Bilingual**: Instant switch between Arabic and English
 - **Modern Design**: Colors inspired by Claude AI
 - **User-Friendly**: Intuitive and clear interface
@@ -429,12 +451,14 @@ copies or substantial portions of the Software.
 ## 🚀 How to Use
 
 ### 1️⃣ Upload Image
+
 ```
 - Click on upload area, or
 - Drag and drop image into designated area
 ```
 
 ### 2️⃣ Measure Coordinates
+
 ```
 - Move mouse over image to see live coordinates
 - Click any point to save it
@@ -442,12 +466,14 @@ copies or substantial portions of the Software.
 ```
 
 ### 3️⃣ Measure Distances
+
 ```
 - Save at least two points
 - Distance between last two points appears automatically
 ```
 
 ### 4️⃣ Export Data
+
 ```
 - Click "Export CSV"
 - A file will download containing:
@@ -461,21 +487,22 @@ copies or substantial portions of the Software.
 
 ## 🎮 Available Tools
 
-| Tool | Function |
-|------|----------|
-| 📁 **New Image** | Upload new image and reset everything |
-| 💾 **Export CSV** | Save all points to CSV file |
-| 🗑️ **Clear All** | Delete all saved points |
-| ☑️ **Show Grid** | Toggle guide lines |
-| 🔍 **Zoom Slider** | Zoom in/out (50%-300%) |
-| 🌐 **Toggle Language** | Switch between Arabic and English |
-| ❌ **Delete Point** | Remove single point from list |
+| Tool                   | Function                              |
+| ---------------------- | ------------------------------------- |
+| 📁 **New Image**       | Upload new image and reset everything |
+| 💾 **Export CSV**      | Save all points to CSV file           |
+| 🗑️ **Clear All**       | Delete all saved points               |
+| ☑️ **Show Grid**       | Toggle guide lines                    |
+| 🔍 **Zoom Slider**     | Zoom in/out (50%-300%)                |
+| 🌐 **Toggle Language** | Switch between Arabic and English     |
+| ❌ **Delete Point**    | Remove single point from list         |
 
 ---
 
 ## 💻 Technical Requirements
 
 ### Supported Browsers
+
 - ✅ Google Chrome (Recommended)
 - ✅ Mozilla Firefox
 - ✅ Microsoft Edge
@@ -483,11 +510,13 @@ copies or substantial portions of the Software.
 - ✅ Opera
 
 ### Minimum Specifications
+
 - Modern browser with HTML5 support
 - JavaScript enabled
 - Canvas API support
 
 ### Supported Image Types
+
 - ✅ JPG / JPEG
 - ✅ PNG
 - ✅ GIF
@@ -509,6 +538,7 @@ Point,X,Y,Color
 ```
 
 ### File Columns:
+
 - **Point**: Point number
 - **X**: Horizontal coordinate
 - **Y**: Vertical coordinate
@@ -519,26 +549,31 @@ Point,X,Y,Color
 ## 🔧 Practical Uses
 
 ### 📐 Graphic Design
+
 - Measure distances between elements
 - Determine precise point locations
 - Extract color values
 
 ### 🏗️ Engineering
+
 - Measure blueprint dimensions
 - Identify specific point coordinates
 - Calculate accurate distances
 
 ### 🖼️ Image Processing
+
 - Analyze pixel locations
 - Extract color data
 - Document points of interest
 
 ### 🎓 Education
+
 - Explain coordinate systems
 - Teach analytic geometry
 - Visual mathematics applications
 
 ### 🔬 Scientific Research
+
 - Analyze microscope images
 - Measure dimensions in images
 - Document spatial data
@@ -592,7 +627,7 @@ npm run typecheck        # Type-check the codebase via TypeScript (JSDoc-based)
 
 ## 📄 License
 
-This tool is open source under MIT License.
+This tool is open source under the MIT License. See [`LICENSE`](./LICENSE) for the full text.
 
 ---
 
@@ -601,17 +636,20 @@ This tool is open source under MIT License.
 > See [`CHANGELOG.md`](./CHANGELOG.md) for the complete history.
 
 ### Version 2.0.0 (2026)
+
 **Full architectural overhaul with zero user-facing functional changes.**
 
 #### ✨ New user-facing features
+
 - 🌗 **Automatic dark mode** — follows system preference via `prefers-color-scheme`
 - 🎨 **Professional redesign** — unified design tokens, refined typography, generous spacing, subtle motion
 - 📱 Improved mobile responsiveness
 
 #### 🏗️ Engineering improvements (under the hood)
+
 - 📦 Code split into **10 ES Modules** (was one 802-line file)
 - 🧹 **0 global variables** (was 13)
-- 🧪 **42 automated tests** (31 unit + 11 E2E)
+- 🧪 **70 automated tests** (50 unit + 20 E2E)
 - ✅ **100% coverage** on pure functions
 - 🔷 **TypeScript** via JSDoc + `tsc --noEmit` (full type safety, no build step)
 - 🤖 **CI/CD** on every PR (ESLint + Prettier + TypeScript + Vitest + Playwright)
@@ -619,6 +657,7 @@ This tool is open source under MIT License.
 - 🌐 **i18n** via `locales/{ar,en}.json` (adding a language = one JSON file)
 
 ### Version 1.0.0 (2024)
+
 - ✅ Initial release
 - ✅ Full Arabic/English bilingual support
 - ✅ Coordinate and distance measurement
@@ -630,10 +669,10 @@ This tool is open source under MIT License.
 
 ## 🌟 Future Features
 
-- [x] ~~Dark Mode~~ ✅ *Shipped in v2.0.0 (automatic)*
-- [x] ~~Manual dark-mode toggle with preference persistence~~ ✅ *Phase 2*
-- [x] ~~Undo/Redo last operation~~ ✅ *Phase 2*
-- [x] ~~Keyboard shortcuts~~ ✅ *Phase 2*
+- [x] ~~Dark Mode~~ ✅ _Shipped in v2.0.0 (automatic)_
+- [x] ~~Manual dark-mode toggle with preference persistence~~ ✅ _Phase 2_
+- [x] ~~Undo/Redo last operation~~ ✅ _Phase 2_
+- [x] ~~Keyboard shortcuts~~ ✅ _Phase 2_
 - [ ] Save entire project (LocalStorage / JSON)
 - [ ] Draw lines and shapes
 - [ ] Measure angles
@@ -654,6 +693,7 @@ This tool is open source under MIT License.
 - 💻 **App**: [[Tool URL](https://abosalehg-ui.github.io/ImageMetrics-Tool/)]
 
 ---
+
 <div align="center">
 
 **ImageMetrics Tool** - Precision in Every Pixel

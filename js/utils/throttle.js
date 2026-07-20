@@ -21,23 +21,3 @@ export function rafThrottle(fn) {
     });
   };
 }
-
-/**
- * Throttle a function to at most one call every `wait` milliseconds (leading
- * edge). Pure and timer-injectable for testing.
- * @template {(...args: any[]) => void} F
- * @param {F} fn
- * @param {number} wait milliseconds between allowed calls
- * @param {() => number} [now] clock source, defaults to Date.now
- * @returns {(...args: Parameters<F>) => void}
- */
-export function throttle(fn, wait, now = Date.now) {
-  let last = -Infinity;
-  return (...args) => {
-    const t = now();
-    if (t - last >= wait) {
-      last = t;
-      fn(...args);
-    }
-  };
-}

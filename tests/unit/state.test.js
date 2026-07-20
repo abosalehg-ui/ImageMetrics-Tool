@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { store, setState, subscribe } from '../../js/state.js';
+import { store, setState } from '../../js/state.js';
 
 // state.js uses module-level singletons. Reset before each test to keep
 // tests independent.
@@ -48,48 +48,5 @@ describe('setState', () => {
     const newPoints = [{ x: 1, y: 2, color: '#fff' }];
     setState({ points: newPoints });
     expect(store.points).toBe(newPoints);
-  });
-});
-
-describe('subscribe', () => {
-  beforeEach(resetStore);
-
-  it('invokes the subscriber on every setState call', () => {
-    let calls = 0;
-    subscribe(() => calls++);
-    setState({ zoom: 2 });
-    setState({ zoom: 3 });
-    expect(calls).toBe(2);
-  });
-
-  it('passes the current store to the subscriber', () => {
-    /** @type {import('../../js/types.d.ts').Store | undefined} */
-    let received;
-    subscribe((s) => {
-      received = s;
-    });
-    setState({ zoom: 5 });
-    expect(received?.zoom).toBe(5);
-  });
-
-  it('returns an unsubscribe function that detaches the listener', () => {
-    let calls = 0;
-    const unsubscribe = subscribe(() => calls++);
-    setState({ zoom: 2 });
-    expect(calls).toBe(1);
-
-    unsubscribe();
-    setState({ zoom: 3 });
-    expect(calls).toBe(1);
-  });
-
-  it('supports multiple independent subscribers', () => {
-    let aCalls = 0;
-    let bCalls = 0;
-    subscribe(() => aCalls++);
-    subscribe(() => bCalls++);
-    setState({ zoom: 2 });
-    expect(aCalls).toBe(1);
-    expect(bCalls).toBe(1);
   });
 });

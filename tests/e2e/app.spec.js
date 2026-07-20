@@ -105,6 +105,23 @@ test.describe('point measurement', () => {
     await page.locator('.dialog-box .btn-secondary').click();
     await expect(page.locator('.point-item')).toHaveCount(2);
   });
+
+  test('confirm dialog traps Tab focus between its two buttons', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page);
+
+    const canvas = page.locator('#mainCanvas');
+    await canvas.click({ position: { x: 10, y: 10 } });
+    await page.click('#btnClear');
+
+    await expect(page.locator('.dialog-box .btn-danger')).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('.dialog-box .btn-secondary')).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('.dialog-box .btn-danger')).toBeFocused();
+
+    await page.locator('.dialog-box .btn-secondary').click();
+  });
 });
 
 test.describe('controls', () => {
@@ -130,6 +147,60 @@ test.describe('controls', () => {
     await expect(checkbox).toBeChecked();
     await checkbox.uncheck();
     await expect(checkbox).not.toBeChecked();
+  });
+});
+
+test.describe('pan (Shift + drag)', () => {
+  // A narrow viewport forces the zoomed canvas to overflow its container even
+  // with the small fixture image, so there's actually room to pan.
+  test.use({ viewport: { width: 250, height: 600 } });
+
+  test('Shift + drag scrolls the canvas container; a plain drag does not', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page);
+    await page.locator('#zoomSlider').fill('300');
+
+    const container = page.locator('#canvasContainer');
+    await expect(async () => {
+      const { scrollWidth, clientWidth } = await container.evaluate((el) => ({
+        scrollWidth: el.scrollWidth,
+        clientWidth: el.clientWidth,
+      }));
+      expect(scrollWidth).toBeGreaterThan(clientWidth);
+    }).toPass();
+
+    // Start from the middle of the scrollable range so a drag has room to move either way.
+    await container.evaluate((el) => {
+      el.scrollLeft = -el.scrollWidth / 4;
+    });
+    const before = await container.evaluate((el) => el.scrollLeft);
+
+    const canvas = page.locator('#mainCanvas');
+    const box = /** @type {{ x: number, y: number, width: number, height: number }} */ (
+      await canvas.boundingBox()
+    );
+    const startX = box.x + box.width / 2;
+    const startY = box.y + box.height / 2;
+
+    // Plain drag (no Shift): the app should not intercept it as a pan.
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(startX + 60, startY, { steps: 5 });
+    await page.mouse.up();
+    expect(await container.evaluate((el) => el.scrollLeft)).toBe(before);
+
+    // Shift + drag right: reveals content that was off-screen to the left, so
+    // scrollLeft should move toward this RTL container's left extreme (more
+    // negative), the same physical relationship a left-to-right layout has.
+    await page.mouse.move(startX, startY);
+    await page.keyboard.down('Shift');
+    await page.mouse.down();
+    await page.mouse.move(startX + 60, startY, { steps: 5 });
+    await page.mouse.up();
+    await page.keyboard.up('Shift');
+
+    const after = await container.evaluate((el) => el.scrollLeft);
+    expect(after).toBeLessThan(before);
   });
 });
 
@@ -207,10 +278,42 @@ test.describe('theme', () => {
 });
 
 test.describe('keyboard shortcuts help', () => {
-  test('opens the shortcuts panel', async ({ page }) => {
+  test('opens the shortcuts panel and focuses the close button', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('#shortcutsHelp')).not.toHaveClass(/open/);
     await page.click('#btnHelp');
     await expect(page.locator('#shortcutsHelp')).toHaveClass(/open/);
+    await expect(page.locator('#shortcutsHelp')).toHaveAttribute('aria-modal', 'true');
+    await expect(page.locator('#btnCloseShortcuts')).toBeFocused();
+  });
+
+  test('closes via the close button and restores focus', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#btnHelp').focus();
+    await page.click('#btnHelp');
+    await expect(page.locator('#shortcutsHelp')).toHaveClass(/open/);
+
+    await page.click('#btnCloseShortcuts');
+    await expect(page.locator('#shortcutsHelp')).not.toHaveClass(/open/);
+    await expect(page.locator('#shortcutsHelp')).toHaveAttribute('aria-modal', 'false');
+    await expect(page.locator('#btnHelp')).toBeFocused();
+  });
+
+  test('closes via clicking the backdrop', async ({ page }) => {
+    await page.goto('/');
+    await page.click('#btnHelp');
+    await expect(page.locator('#shortcutsHelp')).toHaveClass(/open/);
+
+    await page.locator('#shortcutsHelp').click({ position: { x: 5, y: 5 } });
+    await expect(page.locator('#shortcutsHelp')).not.toHaveClass(/open/);
+  });
+
+  test('Tab cycles focus within the panel instead of leaking out', async ({ page }) => {
+    await page.goto('/');
+    await page.click('#btnHelp');
+    await expect(page.locator('#btnCloseShortcuts')).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.locator('#btnCloseShortcuts')).toBeFocused();
   });
 });

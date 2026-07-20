@@ -15,9 +15,6 @@ export interface Store {
   isDragging: boolean;
 }
 
-export type Listener = (s: Store) => void;
-export type Unsubscribe = () => boolean;
-
 export type Translations = Record<string, string | string[]>;
 
 export interface PixelColor {

@@ -12,7 +12,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### مراجعة هندسية شاملة / Comprehensive Engineering Review
+
+- **Fixed:**
+  - الزوم لم يكن يدعم التصغير رغم ادعاء README بذلك؛ أصبح النطاق الفعلي 50%–300%. / Zoom never actually supported values below 100% despite README claiming 50%–300%; the real range now matches.
+  - كانفس الصورة كان ينهار بصمت (canvas فارغ) مع الصور الكبيرة عند التكبير العالي، متجاوزاً حدود المتصفح الداخلية. أصبح التكبير يُحد تلقائياً ضمن حجم آمن (`maxSafeZoomPercent` في `js/canvas.js`) مع تنبيه Toast عند التقييد. / Large images at high zoom silently overflowed the browser's internal canvas size limit, producing a blank canvas. Zoom is now capped to a browser-safe size per image, with a warning toast when the cap kicks in.
+  - نشر GitHub Pages كان يعمل بالتوازي مع CI دون انتظار نجاح الاختبارات، فيمكن أن ينشر كوداً معطوباً. أصبح النشر job تابعاً لنجاح `quality` و `e2e` في نفس workflow (`ci.yml`)، وحُذف `deploy.yml` المستقل. / GitHub Pages deploy ran in parallel with CI instead of gating on it, so a broken commit could reach production. Deploy is now a job in `ci.yml` that `needs: [quality, e2e]`; the standalone `deploy.yml` was removed.
+  - حذف نقطة عبر `dataset.index` المفقود كان يحذف النقطة رقم 0 خطأً بدل تجاهل الحدث. / Deleting a point with a missing `dataset.index` silently deleted point 0 instead of being a no-op.
+  - صورة SVG بلا أبعاد كانت تُحمَّل "بنجاح" فتُنتج كانفس فارغاً بصمت؛ الآن تُرفض مع رسالة خطأ. / A dimensionless SVG "succeeded" at loading yet produced a silently blank canvas; it's now rejected with an error toast.
+- **Changed:**
+  - تحميل الصور يستخدم الآن `URL.createObjectURL` بدل `FileReader.readAsDataURL`، مما يوفر الذاكرة (تُلغى زيادة ~33% من ترميز base64). / Image loading now uses `URL.createObjectURL` instead of `FileReader.readAsDataURL`, avoiding the ~33% memory overhead of base64 encoding.
+  - سياق الكانفس ثنائي الأبعاد يُنشأ بـ `{ willReadFrequently: true }` لتفادي كلفة قراءة الـ GPU المتكررة عبر `getImageData`. / The 2D canvas context is created with `{ willReadFrequently: true }` to avoid repeated GPU-readback cost from `getImageData`.
+  - حُذف نمط pub/sub غير المستخدم (`subscribe`/`listeners` في `js/state.js`) ودالة `throttle` القائمة على الوقت غير المستخدمة (أُبقيت `rafThrottle`)؛ التحديثات تبقى صريحة عبر استدعاءات مباشرة. / Removed the unused pub/sub pattern (`subscribe`/`listeners` in `js/state.js`) and the unused time-based `throttle` (kept `rafThrottle`); UI updates stay explicit direct calls.
+  - وُحِّدت قراءة لون البكسل المكرَّرة في `js/events.js` لتستخدم `getPixelColor()` بدل التكرار اليدوي مرتين. / De-duplicated the repeated pixel-color extraction in `js/events.js` to use `getPixelColor()` instead of two inline copies.
+  - قائمة النقاط (`js/points.js`) تُبنى الآن عبر DOM APIs بدل `innerHTML` (دفاع استباقي). / The points list (`js/points.js`) is now built via DOM APIs instead of `innerHTML` (defense in depth).
+  - مكدّسا التراجع/الإعادة محدودان الآن بـ `MAX_HISTORY = 100` لقطة. / The undo/redo stacks are now capped at `MAX_HISTORY = 100` snapshots.
+  - نص "لا توجد نقاط محفوظة" لم يعد يستخدم لوناً مضمّناً `#999`؛ يعتمد الآن على قاعدة CSS الموجودة `.points-list > p` القائمة على design tokens. / The "no saved points" text no longer hardcodes an inline `#999` color; it now relies on the existing `.points-list > p` CSS rule built on design tokens.
+- **Added:**
+  - إتاحة الحوارين (تأكيد الحذف ولوحة الاختصارات) الآن تحبس Tab داخلها، وتُدير التركيز عند الفتح/الإغلاق، وتُحدّث `aria-modal` ديناميكياً (`js/ui/focusTrap.js`). / Both dialogs (delete confirmation and the shortcuts panel) now trap Tab focus, manage focus on open/close, and update `aria-modal` dynamically (`js/ui/focusTrap.js`).
+  - زر إغلاق مخصص للوحة اختصارات لوحة المفاتيح، وإغلاق بالنقر على الخلفية. / A dedicated close button for the keyboard-shortcuts panel, plus click-outside-to-close.
+  - أيقونة موقع (favicon) وسياسة أمان محتوى (CSP) عبر `<meta>` في `index.html`. / A favicon and a Content-Security-Policy `<meta>` tag in `index.html`.
+  - ملف `LICENSE` بنص MIT الكامل (كان منقوصاً داخل README فقط). / A `LICENSE` file with the full MIT text (previously only an incomplete copy lived in README).
+  - اختبارات جديدة: `tests/unit/canvas.test.js`، اختبار سقف التاريخ، واختبارات E2E لتراص Tab وإغلاق لوحة الاختصارات والسحب (Pan) بـ Shift+drag في وضع RTL. / New tests: `tests/unit/canvas.test.js`, a history-cap test, and E2E tests for Tab trapping, closing the shortcuts panel, and Shift+drag panning in RTL.
+- **Security:**
+  - أُضيفت CSP تقيّد `script-src` إلى `'self'` فقط. / Added a CSP restricting `script-src` to `'self'` only.
+
 ### Added — أُضيف (المرحلة 2: ميزات UX الأساسية / Phase 2: Core UX Features)
+
 - **تراجع/إعادة (Undo/Redo)** لطفرات النقاط عبر `js/history.js` (مكدّسا past/future بلقطات غير قابلة للتغيير)، مع أزرار في الشريط وحالة تعطيل تلقائية. تحميل صورة جديدة يصفّر التاريخ.
 - **الوضع الليلي بتبديل يدوي** (`js/theme.js`): زر يكتب `data-theme` على `<html>` ويحفظ التفضيل في `localStorage`، مع احترام `prefers-color-scheme` عند غياب اختيار صريح.
 - **اختصارات لوحة المفاتيح** (`js/shortcuts.js`): `Ctrl+Z/Y` تراجع/إعادة، `Ctrl+S` تصدير، `Delete` حذف آخر نقطة، `G` الشبكة، `D` الوضع الليلي، `+/-` تكبير/تصغير، `?` لوحة المساعدة. + لوحة مساعدة منبثقة.
@@ -21,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - اختبارات وحدة جديدة لـ `history` و `clampZoom`، واختبارات E2E للتراجع/الإعادة والوضع الليلي ولوحة المساعدة.
 
 ### Added — أُضيف (المرحلة 1: المتانة والأساس / Phase 1: Robustness & Foundation)
+
 - نظام **Toast** إشعارات غير معطِّل (`js/ui/toast.js`) مع منطقة `aria-live` للقارئات.
 - مربع حوار تأكيد **Dialog** نمطي يدعم لوحة المفاتيح (`js/ui/dialog.js`) بدل `confirm()` الأصلي.
 - معالجة أخطاء تحميل الصور: `img.onerror`، `reader.onerror`، والتحقق من نوع الملف وحجمه (حد 25MB) في `js/upload.js` مع دالة `validateImageFile`.
@@ -30,10 +57,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - اختبارات وحدة جديدة لـ `escapeCsvField` و `timestampSlug` و `throttle`/`rafThrottle`.
 
 ### Changed — تغيّر (المرحلة 1)
+
 - استُبدلت نداءات `alert()`/`confirm()` الخام بنظام Toast/Dialog.
 - يقرأ مدخل الملف نوع الصورة الآن (سابقًا كان الفحص في drop فقط).
 
 ### Added — أُضيف (المرحلة 6)
+
 - نهج **TypeScript تدريجي عبر JSDoc** بدون تغيير امتدادات الملفات أو إضافة build step:
   - `tsconfig.json` بـ `allowJs: true`, `checkJs: true`, `noEmit: true`, `strict: true`.
   - `js/types.d.ts` — تعريفات الأنواع المشتركة (`Point`, `Store`, `Lang`, `Translations`, `PixelColor`, إلخ).
@@ -44,13 +73,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - تحسينات في معالجة الأخطاء (null checks) في الوحدات التي تتعامل مع DOM.
 
 ### Design Decision — قرار تصميمي
+
 **اخترنا JSDoc بدلاً من تحويل `.js` إلى `.ts`** للأسباب التالية:
+
 - صفر تغيير في النشر: الملفات تبقى `.js` ويخدمها GitHub Pages مباشرة.
 - لا حاجة لـ bundler أو خطوة build (نحافظ على فلسفة "بدون build step" للمشروع).
 - type safety كاملة عبر `tsc --noEmit` و `checkJs: true`.
 - يمكن الانتقال إلى ملفات `.ts` لاحقاً في Phase 6b دون تعقيدات.
 
 ### Added — أُضيف (المرحلة 5)
+
 - اختبارات شاملة (E2E) بـ Playwright:
   - `tests/e2e/app.spec.js` — 11 سيناريو مغطّاة:
     - تحميل الصفحة وظهور منطقة الرفع
@@ -73,6 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - سكريبتات npm: `test:e2e`, `test:e2e:ui`.
 
 ### Added — أُضيف (المرحلة 4)
+
 - `.github/workflows/ci.yml` — تشغيل ESLint و Prettier و Vitest على كل push و pull_request إلى `main`.
 - `.github/workflows/deploy.yml` — نشر تلقائي إلى GitHub Pages عند الـ push إلى `main`.
 - ميزات الـ workflow:
@@ -83,6 +116,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - شارة CI status في README.
 
 ### Added — أُضيف (المرحلة 3)
+
 - بنية اختبارات الوحدة بـ Vitest:
   - `tests/unit/measurements.test.js` (8 اختبارات)
   - `tests/unit/color.test.js` (10 اختبارات)
@@ -94,6 +128,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **31 اختباراً تمر، تغطية 100% على الدوال الخالصة:** `distance`, `rgbToHex`, `getPixelColor`, `setState`, `subscribe`, `pointsToCSV`
 
 ### Changed — تغيّر
+
 - **المرحلة 2:** قُسّم `js/app.js` إلى وحدات ES (ES Modules):
   - `js/main.js` — نقطة الدخول
   - `js/state.js` — حالة موحّدة مع pub/sub
@@ -116,10 +151,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - استُخدم event delegation لأزرار حذف النقاط (`.delete-point`) بدلاً من inline `onclick`.
 
 ### Breaking — تغييرات جوهرية
+
 - لم يعد بالإمكان تشغيل التطبيق بفتح `index.html` مباشرة من نظام الملفات (`file://`) بسبب سياسة CORS لـ ES Modules و fetch. يجب استخدام خادم محلي (`npm run dev` أو `npx serve .` أو `python3 -m http.server`). راجع README.md للتفاصيل.
 - GitHub Pages يعمل بشكل طبيعي دون أي تغيير.
 
 ### Added — أُضيف
+
 - `package.json` مع devDependencies لاختبار و linting و formatting
 - إعداد ESLint بالـ flat config (`eslint.config.js`)
 - إعداد Prettier (`.prettierrc` و `.prettierignore`)
@@ -130,6 +167,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024
 
 ### Added — أُضيف
+
 - إطلاق الإصدار الأول
 - دعم كامل للغتين العربية والإنجليزية
 - قياس الإحداثيات والمسافات

@@ -8,6 +8,9 @@ const STORAGE_KEY = 'imagemetrics-lang';
 /** @type {Translations} */
 let translations = {};
 
+/** Guards against overlapping fetches if the user toggles language rapidly. */
+let isLoading = false;
+
 /**
  * Read the user's stored language preference, falling back to Arabic.
  * @returns {Lang}
@@ -27,18 +30,24 @@ export function getStoredLang() {
  * @returns {Promise<void>}
  */
 export async function loadLocale(lang) {
-  const res = await fetch(`locales/${lang}.json`);
-  if (!res.ok) {
-    throw new Error(`Failed to load locale: ${lang}`);
-  }
-  translations = await res.json();
-  setState({ lang });
+  if (isLoading) return;
+  isLoading = true;
   try {
-    localStorage.setItem(STORAGE_KEY, lang);
-  } catch {
-    // Ignore storage failures; the active language still applies in-page.
+    const res = await fetch(`locales/${lang}.json`);
+    if (!res.ok) {
+      throw new Error(`Failed to load locale: ${lang}`);
+    }
+    translations = await res.json();
+    setState({ lang });
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch {
+      // Ignore storage failures; the active language still applies in-page.
+    }
+    applyTranslations();
+  } finally {
+    isLoading = false;
   }
-  applyTranslations();
 }
 
 /**

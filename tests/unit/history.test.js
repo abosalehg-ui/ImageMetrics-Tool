@@ -6,6 +6,7 @@ import {
   resetHistory,
   canUndo,
   canRedo,
+  MAX_HISTORY,
 } from '../../js/history.js';
 
 const p = (x) => ({ x, y: x, color: '#000' });
@@ -63,5 +64,18 @@ describe('history', () => {
     resetHistory();
     expect(canUndo()).toBe(false);
     expect(canRedo()).toBe(false);
+  });
+
+  it('drops the oldest snapshot once past MAX_HISTORY entries', () => {
+    for (let i = 0; i < MAX_HISTORY + 10; i++) {
+      pushHistory([p(i)]);
+    }
+    let current = [p(MAX_HISTORY + 10)];
+    let undoCount = 0;
+    while (canUndo()) {
+      current = undoHistory(current) ?? current;
+      undoCount++;
+    }
+    expect(undoCount).toBe(MAX_HISTORY);
   });
 });

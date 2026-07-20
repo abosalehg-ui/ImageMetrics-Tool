@@ -1,128 +1,194 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';"
+    />
     <title>ImageMetrics Tool - أداة قياسات الصور</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23d97757'/%3E%3Ccircle cx='50' cy='50' r='28' fill='none' stroke='white' stroke-width='8'/%3E%3Cline x1='50' y1='8' x2='50' y2='30' stroke='white' stroke-width='8'/%3E%3Cline x1='50' y1='70' x2='50' y2='92' stroke='white' stroke-width='8'/%3E%3Cline x1='8' y1='50' x2='30' y2='50' stroke='white' stroke-width='8'/%3E%3Cline x1='70' y1='50' x2='92' y2='50' stroke='white' stroke-width='8'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
     <div class="container">
-        <header class="header">
-            <div class="header-content">
-                <h1 data-i18n="mainTitle">ImageMetrics Tool</h1>
-                <p data-i18n="subtitle">أداة قياسات الصور - قياس الإحداثيات والمسافات بدقة</p>
+      <header class="header">
+        <div class="header-content">
+          <h1 data-i18n="mainTitle">ImageMetrics Tool</h1>
+          <p data-i18n="subtitle">أداة قياسات الصور - قياس الإحداثيات والمسافات بدقة</p>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="btnTheme" type="button" data-i18n-aria="ariaTheme">
+            🌙
+          </button>
+          <button class="icon-btn" id="btnHelp" type="button" data-i18n-aria="ariaHelp">⌨️</button>
+          <button class="lang-switch" data-i18n-aria="ariaLangSwitch">English</button>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <div class="canvas-area">
+          <div class="instructions">
+            <h4 data-i18n="instrTitle">📋 تعليمات الاستخدام:</h4>
+            <ul id="instrList">
+              <li>ارفع صورة بالنقر أو السحب والإفلات</li>
+              <li>انقر على الصورة لحفظ نقطة وإحداثياتها</li>
+              <li>حرك الفأرة لمشاهدة الإحداثيات الحية</li>
+              <li>اختر نقطتين لقياس المسافة بينهما</li>
+              <li>اضغط Shift + اسحب للتجول في الصورة المكبرة</li>
+              <li>صدّر النقاط إلى ملف CSV</li>
+            </ul>
+          </div>
+
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">📁</div>
+            <h2 data-i18n="uploadTitle">اسحب وأفلت الصورة هنا</h2>
+            <p data-i18n="uploadText">أو انقر للاختيار من جهازك</p>
+            <input type="file" id="fileInput" accept="image/*" style="display: none" />
+          </div>
+
+          <div class="canvas-container" id="canvasContainer">
+            <canvas id="mainCanvas" role="img" tabindex="0" data-i18n-aria="ariaCanvas"></canvas>
+          </div>
+
+          <div class="controls" role="toolbar">
+            <button
+              class="btn-primary"
+              id="btnNewImage"
+              data-i18n="btnNewImage"
+              data-i18n-aria="ariaNewImage"
+            >
+              📁 صورة جديدة
+            </button>
+            <button
+              class="btn-secondary"
+              id="btnUndo"
+              data-i18n="btnUndo"
+              data-i18n-aria="ariaUndo"
+              disabled
+            >
+              ↶ تراجع
+            </button>
+            <button
+              class="btn-secondary"
+              id="btnRedo"
+              data-i18n="btnRedo"
+              data-i18n-aria="ariaRedo"
+              disabled
+            >
+              ↷ إعادة
+            </button>
+            <button
+              class="btn-primary"
+              id="btnExport"
+              data-i18n="btnExport"
+              data-i18n-aria="ariaExport"
+            >
+              💾 تصدير CSV
+            </button>
+            <button
+              class="btn-danger"
+              id="btnClear"
+              data-i18n="btnClear"
+              data-i18n-aria="ariaClear"
+            >
+              🗑️ مسح الكل
+            </button>
+
+            <label class="checkbox-label">
+              <input type="checkbox" id="gridToggle" />
+              <span data-i18n="gridLabel">إظهار الشبكة</span>
+            </label>
+
+            <div class="zoom-controls">
+              <span data-i18n="zoomLabel">تكبير:</span>
+              <input
+                type="range"
+                id="zoomSlider"
+                min="50"
+                max="300"
+                value="100"
+                data-i18n-aria="ariaZoom"
+              />
+              <span id="zoomValue">100%</span>
             </div>
-            <div class="header-actions">
-                <button class="icon-btn" id="btnTheme" type="button" data-i18n-aria="ariaTheme">🌙</button>
-                <button class="icon-btn" id="btnHelp" type="button" data-i18n-aria="ariaHelp">⌨️</button>
-                <button class="lang-switch" data-i18n-aria="ariaLangSwitch">English</button>
-            </div>
-        </header>
-
-        <div class="main-content">
-            <div class="canvas-area">
-                <div class="instructions">
-                    <h4 data-i18n="instrTitle">📋 تعليمات الاستخدام:</h4>
-                    <ul id="instrList">
-                        <li>ارفع صورة بالنقر أو السحب والإفلات</li>
-                        <li>انقر على الصورة لحفظ نقطة وإحداثياتها</li>
-                        <li>حرك الفأرة لمشاهدة الإحداثيات الحية</li>
-                        <li>اختر نقطتين لقياس المسافة بينهما</li>
-                        <li>اضغط Shift + اسحب للتجول في الصورة المكبرة</li>
-                        <li>صدّر النقاط إلى ملف CSV</li>
-                    </ul>
-                </div>
-
-                <div class="upload-zone" id="uploadZone">
-                    <div class="upload-icon">📁</div>
-                    <h2 data-i18n="uploadTitle">اسحب وأفلت الصورة هنا</h2>
-                    <p data-i18n="uploadText">أو انقر للاختيار من جهازك</p>
-                    <input type="file" id="fileInput" accept="image/*" style="display:none;">
-                </div>
-
-                <div class="canvas-container" id="canvasContainer">
-                    <canvas id="mainCanvas" role="img" tabindex="0" data-i18n-aria="ariaCanvas"></canvas>
-                </div>
-
-                <div class="controls" role="toolbar">
-                    <button class="btn-primary" id="btnNewImage" data-i18n="btnNewImage" data-i18n-aria="ariaNewImage">📁 صورة جديدة</button>
-                    <button class="btn-secondary" id="btnUndo" data-i18n="btnUndo" data-i18n-aria="ariaUndo" disabled>↶ تراجع</button>
-                    <button class="btn-secondary" id="btnRedo" data-i18n="btnRedo" data-i18n-aria="ariaRedo" disabled>↷ إعادة</button>
-                    <button class="btn-primary" id="btnExport" data-i18n="btnExport" data-i18n-aria="ariaExport">💾 تصدير CSV</button>
-                    <button class="btn-danger" id="btnClear" data-i18n="btnClear" data-i18n-aria="ariaClear">🗑️ مسح الكل</button>
-
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="gridToggle">
-                        <span data-i18n="gridLabel">إظهار الشبكة</span>
-                    </label>
-
-                    <div class="zoom-controls">
-                        <span data-i18n="zoomLabel">تكبير:</span>
-                        <input type="range" id="zoomSlider" min="100" max="300" value="100" data-i18n-aria="ariaZoom">
-                        <span id="zoomValue">100%</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar">
-                <div class="info-panel">
-                    <h3 data-i18n="liveCoordTitle">📍 الإحداثيات الحية</h3>
-                    <div class="coord-display" aria-live="polite">
-                        <div class="coord-item">
-                            <span class="coord-label">X:</span>
-                            <span id="liveX">-</span>
-                        </div>
-                        <div class="coord-item">
-                            <span class="coord-label">Y:</span>
-                            <span id="liveY">-</span>
-                        </div>
-                        <div class="coord-item">
-                            <span class="coord-label">RGB:</span>
-                            <span id="liveRGB">-</span>
-                        </div>
-                        <div class="coord-item">
-                            <span class="coord-label">HEX:</span>
-                            <span id="liveHEX">-</span>
-                            <span class="color-preview" id="colorPreview"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="info-panel">
-                    <h3 data-i18n="savedPointsTitle">📌 النقاط المحفوظة</h3>
-                    <div class="points-list" id="pointsList">
-                        <p style="text-align:center;color:#999;">لا توجد نقاط محفوظة</p>
-                    </div>
-                    <div class="distance-display" id="distanceDisplay">
-                        <span data-i18n="distanceLabel">المسافة:</span> <span id="distanceValue">0</span> px
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
 
-        <div class="footer">
-            <p>تطوير: عبدالكريم العبود | <a href="mailto:abo.saleh.g@gmail.com">abo.saleh.g@gmail.com</a></p>
-            <p>© 2024 ImageMetrics Tool - All Rights Reserved</p>
+        <div class="sidebar">
+          <div class="info-panel">
+            <h3 data-i18n="liveCoordTitle">📍 الإحداثيات الحية</h3>
+            <div class="coord-display" aria-live="polite">
+              <div class="coord-item">
+                <span class="coord-label">X:</span>
+                <span id="liveX">-</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label">Y:</span>
+                <span id="liveY">-</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label">RGB:</span>
+                <span id="liveRGB">-</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label">HEX:</span>
+                <span id="liveHEX">-</span>
+                <span class="color-preview" id="colorPreview"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <h3 data-i18n="savedPointsTitle">📌 النقاط المحفوظة</h3>
+            <div class="points-list" id="pointsList">
+              <p>لا توجد نقاط محفوظة</p>
+            </div>
+            <div class="distance-display" id="distanceDisplay">
+              <span data-i18n="distanceLabel">المسافة:</span> <span id="distanceValue">0</span> px
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="footer">
+        <p>
+          تطوير: عبدالكريم العبود | <a href="mailto:abo.saleh.g@gmail.com">abo.saleh.g@gmail.com</a>
+        </p>
+        <p>© 2024 ImageMetrics Tool - All Rights Reserved</p>
+      </div>
     </div>
 
     <div class="shortcuts-help" id="shortcutsHelp" role="dialog" aria-modal="false">
-        <div class="shortcuts-help-box">
-            <h3 data-i18n="shortcutsTitle">⌨️ اختصارات لوحة المفاتيح</h3>
-            <ul class="shortcuts-list">
-                <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> <span data-i18n="scUndo">تراجع</span></li>
-                <li><kbd>Ctrl</kbd>+<kbd>Y</kbd> <span data-i18n="scRedo">إعادة</span></li>
-                <li><kbd>Ctrl</kbd>+<kbd>S</kbd> <span data-i18n="scExport">تصدير CSV</span></li>
-                <li><kbd>Delete</kbd> <span data-i18n="scDelete">حذف آخر نقطة</span></li>
-                <li><kbd>G</kbd> <span data-i18n="scGrid">إظهار/إخفاء الشبكة</span></li>
-                <li><kbd>D</kbd> <span data-i18n="scTheme">الوضع الليلي</span></li>
-                <li><kbd>+</kbd> / <kbd>-</kbd> <span data-i18n="scZoom">تكبير/تصغير</span></li>
-                <li><kbd>?</kbd> <span data-i18n="scHelp">إظهار هذه القائمة</span></li>
-            </ul>
+      <div class="shortcuts-help-box">
+        <div class="shortcuts-help-header">
+          <h3 data-i18n="shortcutsTitle">⌨️ اختصارات لوحة المفاتيح</h3>
+          <button
+            class="icon-btn"
+            id="btnCloseShortcuts"
+            type="button"
+            data-i18n-aria="ariaCloseHelp"
+          >
+            ✕
+          </button>
         </div>
+        <ul class="shortcuts-list">
+          <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> <span data-i18n="scUndo">تراجع</span></li>
+          <li><kbd>Ctrl</kbd>+<kbd>Y</kbd> <span data-i18n="scRedo">إعادة</span></li>
+          <li><kbd>Ctrl</kbd>+<kbd>S</kbd> <span data-i18n="scExport">تصدير CSV</span></li>
+          <li><kbd>Delete</kbd> <span data-i18n="scDelete">حذف آخر نقطة</span></li>
+          <li><kbd>G</kbd> <span data-i18n="scGrid">إظهار/إخفاء الشبكة</span></li>
+          <li><kbd>D</kbd> <span data-i18n="scTheme">الوضع الليلي</span></li>
+          <li><kbd>+</kbd> / <kbd>-</kbd> <span data-i18n="scZoom">تكبير/تصغير</span></li>
+          <li><kbd>?</kbd> <span data-i18n="scHelp">إظهار هذه القائمة</span></li>
+        </ul>
+      </div>
     </div>
 
     <script type="module" src="js/main.js"></script>
-</body>
+  </body>
 </html>

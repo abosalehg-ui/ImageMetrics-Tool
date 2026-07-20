@@ -2,6 +2,27 @@ import { store } from './state.js';
 
 const POINT_COLORS = ['#d97757', '#cc6244', '#b85739', '#a34d30', '#8f4427', '#7a3b1f', '#663218'];
 
+/**
+ * Conservative per-axis canvas size cap shared across major desktop browsers.
+ * Exceeding a browser's internal canvas limit produces a silently blank
+ * canvas rather than an error, so zoom is kept from ever pushing a rendered
+ * dimension past this value.
+ */
+export const MAX_CANVAS_DIMENSION = 16384;
+
+/**
+ * The largest zoom percentage that keeps an image's longer axis within
+ * MAX_CANVAS_DIMENSION once rendered. Pure function of the image size.
+ * @param {number} imgWidth
+ * @param {number} imgHeight
+ * @returns {number}
+ */
+export function maxSafeZoomPercent(imgWidth, imgHeight) {
+  const longest = Math.max(imgWidth, imgHeight);
+  if (longest <= 0) return 100;
+  return Math.floor((MAX_CANVAS_DIMENSION / longest) * 100);
+}
+
 /** @type {HTMLCanvasElement | null} */
 let canvas = null;
 
@@ -11,7 +32,9 @@ let ctx = null;
 /** @param {HTMLCanvasElement} canvasEl */
 export function initCanvas(canvasEl) {
   canvas = canvasEl;
-  ctx = canvas.getContext('2d');
+  // Pixel colors are read on every mousemove/click via getImageData, so hint
+  // the browser to avoid the GPU-readback penalty on repeated reads.
+  ctx = canvas.getContext('2d', { willReadFrequently: true });
 }
 
 /** @returns {HTMLCanvasElement} */

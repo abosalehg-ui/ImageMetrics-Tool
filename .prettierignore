@@ -5,10 +5,3 @@ playwright-report/
 test-results/
 *.min.js
 *.min.css
-
-# Legacy files — will be formatted after Phase 1 refactor
-index.html
-README.md
-IMPROVEMENTS.md
-CHANGELOG.md
-.github/
