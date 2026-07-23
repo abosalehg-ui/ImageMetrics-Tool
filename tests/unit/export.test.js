@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { pointsToCSV, escapeCsvField, timestampSlug } from '../../js/export.js';
+import { pointsToCSV, pointsToJSON, escapeCsvField, timestampSlug } from '../../js/export.js';
 
 describe('pointsToCSV', () => {
   it('always includes the header row', () => {
@@ -65,6 +65,38 @@ describe('escapeCsvField', () => {
 
   it('wraps values containing newlines', () => {
     expect(escapeCsvField('line1\nline2')).toBe('"line1\nline2"');
+  });
+});
+
+describe('pointsToJSON', () => {
+  it('serializes points with 1-based indices and a count', () => {
+    const json = pointsToJSON([
+      { x: 10, y: 20, color: '#aaa' },
+      { x: 30, y: 40, color: '#bbb' },
+    ]);
+    const parsed = JSON.parse(json);
+    expect(parsed.pointCount).toBe(2);
+    expect(parsed.points).toEqual([
+      { index: 1, x: 10, y: 20, color: '#aaa' },
+      { index: 2, x: 30, y: 40, color: '#bbb' },
+    ]);
+  });
+
+  it('merges provided metadata into the payload', () => {
+    const json = pointsToJSON([{ x: 1, y: 2, color: '#000' }], {
+      generatedAt: '2026-01-01T00:00:00.000Z',
+      measurements: { pathLength: 0 },
+    });
+    const parsed = JSON.parse(json);
+    expect(parsed.generatedAt).toBe('2026-01-01T00:00:00.000Z');
+    expect(parsed.measurements).toEqual({ pathLength: 0 });
+    expect(parsed.pointCount).toBe(1);
+  });
+
+  it('produces valid JSON for an empty points array', () => {
+    const parsed = JSON.parse(pointsToJSON([]));
+    expect(parsed.pointCount).toBe(0);
+    expect(parsed.points).toEqual([]);
   });
 });
 

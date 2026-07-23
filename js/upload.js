@@ -1,5 +1,7 @@
 import { setState } from './state.js';
 import { updatePointsList, updateDistanceDisplay, updateHistoryButtons } from './points.js';
+import { updateMetricsPanel } from './metrics.js';
+import { clearCalibration } from './calibration.js';
 import { resetHistory } from './history.js';
 import { setZoom, resetZoomCapWarning } from './controls.js';
 import { t } from './i18n.js';
@@ -85,12 +87,16 @@ export function loadImage(file) {
 
     document.getElementById('canvasContainer')?.classList.add('active');
     setState({ img, points: [] });
+    // Calibration is tied to a specific image's pixel scale, so a new image
+    // invalidates it.
+    clearCalibration();
     resetHistory();
     resetZoomCapWarning();
     setZoom(100);
     updatePointsList();
     updateDistanceDisplay();
     updateHistoryButtons();
+    updateMetricsPanel();
   };
 
   img.src = url;

@@ -12,6 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### خواص قياس جديدة / New Image Metrics Features
+
+- **Added:**
+  - **قياس الزوايا:** حساب الزاوية الداخلية (بالدرجات) عند منتصف آخر ثلاث نقاط، مع رسم قوس الزاوية على الكانفس (`angleAt` في `js/measurements.js`). / **Angle measurement:** the interior angle (in degrees) at the middle of the last three saved points, with an arc drawn on the canvas (`angleAt` in `js/measurements.js`).
+  - **طول المسار والمساحة:** مجموع المسافات عبر كل النقاط (polyline) ومساحة المضلّع عبر صيغة Shoelace، مع خط رابط بين النقاط وإغلاق منقّط للمضلّع (`pathLength`، `polygonArea`). / **Path length & area:** the total polyline length across all points and the polygon area via the shoelace formula, with a connecting line and a dashed polygon closure drawn on the canvas (`pathLength`, `polygonArea`).
+  - **المعايرة للوحدات الحقيقية:** تحديد مقياس من مسافة مرجعية معروفة (مثلاً 10 سم) لتحويل كل القياسات (المسافة، المسار، المساحة) إلى مم/سم/م/إنش/قدم (`js/calibration.js`). المعايرة تُلغى تلقائياً عند تحميل صورة جديدة. / **Real-world calibration:** set a scale from a known reference distance (e.g. 10 cm) to convert every measurement (distance, path, area) into mm/cm/m/in/ft (`js/calibration.js`). Calibration is cleared automatically when a new image loads.
+  - **مقاييس الصورة:** الأبعاد ونسبة الأبعاد المبسّطة (مثل 16:9) والميجابكسل (`imageMetrics`). / **Image metrics:** dimensions, simplified aspect ratio (e.g. 16:9), and megapixels (`imageMetrics`).
+  - **الصندوق المحيط:** أبعاد أصغر مستطيل يحيط بكل النقاط المحفوظة (`boundingBox`). / **Bounding box:** the size of the smallest axis-aligned rectangle enclosing all saved points (`boundingBox`).
+  - **تصدير JSON:** زر جديد يصدّر النقاط مع كامل سياق القياس (مقاييس الصورة، المعايرة، طول المسار، المساحة، الصندوق المحيط، وطابع زمني) (`exportToJSON`، `pointsToJSON`). / **JSON export:** a new button exports the points together with the full measurement context (image metrics, calibration, path length, area, bounding box, and a timestamp) (`exportToJSON`, `pointsToJSON`).
+  - ثلاث لوحات جانبية جديدة (القياسات، المعايرة، مقاييس الصورة) مع سلاسل i18n بالعربية والإنجليزية، واختبارات وحدة جديدة لكل الدوال الحسابية النقية (`tests/unit/calibration.test.js` + توسعة `measurements.test.js` و`export.test.js`، 39 اختباراً جديداً). / Three new sidebar panels (Measurements, Calibration, Image metrics) with Arabic and English i18n strings, plus new unit tests covering every pure computation (`tests/unit/calibration.test.js` and expanded `measurements.test.js` / `export.test.js`, 39 new tests).
+
 ### مراجعة هندسية شاملة / Comprehensive Engineering Review
 
 - **Fixed:**

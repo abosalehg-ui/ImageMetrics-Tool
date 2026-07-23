@@ -2,6 +2,8 @@ import { store, setState } from './state.js';
 import { t } from './i18n.js';
 import { renderCanvas } from './canvas.js';
 import { distance } from './measurements.js';
+import { formatLength } from './calibration.js';
+import { updateMetricsPanel } from './metrics.js';
 import { confirmDialog } from './ui/dialog.js';
 import { pushHistory, undoHistory, redoHistory, canUndo, canRedo } from './history.js';
 
@@ -24,6 +26,7 @@ export function refreshPointsUI() {
   updatePointsList();
   updateDistanceDisplay();
   updateHistoryButtons();
+  updateMetricsPanel();
 }
 
 /**
@@ -125,7 +128,7 @@ export function updateDistanceDisplay() {
   if (points.length >= 2) {
     const dist = distance(points[points.length - 2], points[points.length - 1]);
     const valueEl = document.getElementById('distanceValue');
-    if (valueEl) valueEl.textContent = String(dist);
+    if (valueEl) valueEl.textContent = formatLength(dist, store.calibration);
     displayEl.classList.add('active');
   } else {
     displayEl.classList.remove('active');

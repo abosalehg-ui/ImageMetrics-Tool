@@ -8,6 +8,7 @@ export const store = {
   showGrid: false,
   lang: 'ar',
   isDragging: false,
+  calibration: null,
 };
 
 /**

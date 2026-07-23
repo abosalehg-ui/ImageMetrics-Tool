@@ -64,9 +64,76 @@ export function renderCanvas() {
     drawGrid();
   }
 
+  drawConnections(points, zoom);
+
   points.forEach((point, idx) => {
     drawPoint(point.x * zoom, point.y * zoom, POINT_COLORS[idx % POINT_COLORS.length], idx + 1);
   });
+}
+
+/**
+ * Draw the polyline through consecutive saved points, a dashed closing segment
+ * that completes the polygon once three or more points exist, and a small arc
+ * marking the interior angle at the middle of the last three points. These are
+ * visual aids for the path-length, area, and angle metrics.
+ * @param {import('./types.d.ts').Point[]} points
+ * @param {number} zoom
+ */
+function drawConnections(points, zoom) {
+  if (!ctx || points.length < 2) return;
+
+  ctx.save();
+  ctx.strokeStyle = 'rgba(217, 119, 87, 0.85)';
+  ctx.lineWidth = Math.max(1, 1.5 * zoom);
+  ctx.lineJoin = 'round';
+
+  ctx.beginPath();
+  ctx.moveTo(points[0].x * zoom, points[0].y * zoom);
+  for (let i = 1; i < points.length; i++) {
+    ctx.lineTo(points[i].x * zoom, points[i].y * zoom);
+  }
+  ctx.stroke();
+
+  if (points.length >= 3) {
+    const first = points[0];
+    const last = points[points.length - 1];
+    ctx.setLineDash([6 * zoom, 5 * zoom]);
+    ctx.beginPath();
+    ctx.moveTo(last.x * zoom, last.y * zoom);
+    ctx.lineTo(first.x * zoom, first.y * zoom);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    drawAngleArc(points[points.length - 3], points[points.length - 2], last, zoom);
+  }
+
+  ctx.restore();
+}
+
+/**
+ * Draw a short arc at `vertex` spanning the angle between the arms to `a` and
+ * `b`, to visualise the angle read-out. No-op when either arm is degenerate.
+ * @param {import('./types.d.ts').Point} a
+ * @param {import('./types.d.ts').Point} vertex
+ * @param {import('./types.d.ts').Point} b
+ * @param {number} zoom
+ */
+function drawAngleArc(a, vertex, b, zoom) {
+  if (!ctx) return;
+  const a1 = Math.atan2(a.y - vertex.y, a.x - vertex.x);
+  const a2 = Math.atan2(b.y - vertex.y, b.x - vertex.x);
+  if (!Number.isFinite(a1) || !Number.isFinite(a2)) return;
+
+  // Sweep the shorter way around so the arc traces the interior angle.
+  let delta = a2 - a1;
+  while (delta <= -Math.PI) delta += 2 * Math.PI;
+  while (delta > Math.PI) delta -= 2 * Math.PI;
+
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+  ctx.lineWidth = Math.max(1, 1.5 * zoom);
+  ctx.arc(vertex.x * zoom, vertex.y * zoom, 18 * zoom, a1, a1 + delta, delta < 0);
+  ctx.stroke();
 }
 
 function drawGrid() {
