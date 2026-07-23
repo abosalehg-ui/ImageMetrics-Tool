@@ -1,6 +1,7 @@
 import { store } from './state.js';
 import { t } from './i18n.js';
 import { showToast } from './ui/toast.js';
+import { pathLength, polygonArea, boundingBox, imageMetrics } from './measurements.js';
 
 /** @typedef {import('./types.d.ts').Point} Point */
 
@@ -45,6 +46,44 @@ export function timestampSlug(date = new Date()) {
   );
 }
 
+/**
+ * Serialize points plus optional metadata (image info, calibration, computed
+ * measurements) into a pretty-printed JSON string. Pure — the caller supplies
+ * any non-deterministic metadata such as timestamps.
+ * @param {Point[]} points
+ * @param {Record<string, unknown>} [meta]
+ * @returns {string}
+ */
+export function pointsToJSON(points, meta = {}) {
+  const payload = {
+    ...meta,
+    pointCount: points.length,
+    points: points.map((point, idx) => ({
+      index: idx + 1,
+      x: point.x,
+      y: point.y,
+      color: point.color,
+    })),
+  };
+  return JSON.stringify(payload, null, 2);
+}
+
+/**
+ * Trigger a browser download of `content` as a file named `filename`.
+ * @param {string} content
+ * @param {string} filename
+ * @param {string} mimeType
+ */
+function downloadFile(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export function exportToCSV() {
   const { points } = store;
   if (points.length === 0) {
@@ -53,12 +92,34 @@ export function exportToCSV() {
   }
 
   const csv = pointsToCSV(points);
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `image_coordinates_${timestampSlug()}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadFile(csv, `image_coordinates_${timestampSlug()}.csv`, 'text/csv');
+  showToast(t('exportSuccess'), 'success');
+}
+
+/**
+ * Export points together with the full measurement context (image metrics,
+ * calibration, path length, polygon area, bounding box) as a JSON file.
+ */
+export function exportToJSON() {
+  const { points, img, calibration } = store;
+  if (points.length === 0) {
+    showToast(t('noPointsToExport'), 'warning');
+    return;
+  }
+
+  /** @type {Record<string, unknown>} */
+  const meta = {
+    generatedAt: new Date().toISOString(),
+  };
+  if (img) meta.image = imageMetrics(img.width, img.height);
+  if (calibration) meta.calibration = calibration;
+  meta.measurements = {
+    pathLength: pathLength(points),
+    polygonArea: polygonArea(points),
+    boundingBox: boundingBox(points),
+  };
+
+  const json = pointsToJSON(points, meta);
+  downloadFile(json, `image_metrics_${timestampSlug()}.json`, 'application/json');
   showToast(t('exportSuccess'), 'success');
 }

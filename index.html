@@ -91,6 +91,14 @@
               💾 تصدير CSV
             </button>
             <button
+              class="btn-secondary"
+              id="btnExportJson"
+              data-i18n="btnExportJson"
+              data-i18n-aria="ariaExportJson"
+            >
+              🧾 تصدير JSON
+            </button>
+            <button
               class="btn-danger"
               id="btnClear"
               data-i18n="btnClear"
@@ -149,7 +157,86 @@
               <p>لا توجد نقاط محفوظة</p>
             </div>
             <div class="distance-display" id="distanceDisplay">
-              <span data-i18n="distanceLabel">المسافة:</span> <span id="distanceValue">0</span> px
+              <span data-i18n="distanceLabel">المسافة:</span> <span id="distanceValue">-</span>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <h3 data-i18n="measurementsTitle">📐 القياسات</h3>
+            <div class="coord-display">
+              <div class="coord-item">
+                <span class="coord-label" data-i18n="metricCountLabel">عدد النقاط</span>
+                <span id="metricCount">0</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label" data-i18n="metricAngleLabel">الزاوية</span>
+                <span id="metricAngle">-</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label" data-i18n="metricPathLabel">المسار</span>
+                <span id="metricPath">-</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label" data-i18n="metricAreaLabel">المساحة</span>
+                <span id="metricArea">-</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label" data-i18n="metricBBoxLabel">الصندوق المحيط</span>
+                <span id="metricBBox">-</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <h3 data-i18n="calibrationTitle">📏 المعايرة للوحدات الحقيقية</h3>
+            <p class="panel-hint" data-i18n="calHint">
+              احفظ نقطتين على مسافة معروفة، أدخل الطول الحقيقي، ثم عايِر.
+            </p>
+            <div class="calibration-controls">
+              <input
+                type="number"
+                id="calLength"
+                min="0"
+                step="any"
+                placeholder="10"
+                data-i18n-aria="ariaCalLength"
+              />
+              <select id="calUnit" data-i18n-aria="ariaCalUnit">
+                <option value="mm">mm</option>
+                <option value="cm" selected>cm</option>
+                <option value="m">m</option>
+                <option value="in">in</option>
+                <option value="ft">ft</option>
+              </select>
+            </div>
+            <div class="calibration-actions">
+              <button class="btn-primary" id="btnCalibrate" data-i18n="btnCalibrate">
+                معايرة من آخر نقطتين
+              </button>
+              <button class="btn-secondary" id="btnCalReset" data-i18n="btnCalReset" disabled>
+                إعادة تعيين
+              </button>
+            </div>
+            <p class="cal-status" id="calStatus" data-i18n="calNotSet" aria-live="polite">
+              لا توجد معايرة — القياسات بالبكسل
+            </p>
+          </div>
+
+          <div class="info-panel">
+            <h3 data-i18n="imageMetricsTitle">🖼️ مقاييس الصورة</h3>
+            <div class="coord-display">
+              <div class="coord-item">
+                <span class="coord-label" data-i18n="imgDimensionsLabel">الأبعاد</span>
+                <span id="imgDimensions">-</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label" data-i18n="imgAspectLabel">نسبة الأبعاد</span>
+                <span id="imgAspect">-</span>
+              </div>
+              <div class="coord-item">
+                <span class="coord-label" data-i18n="imgMegapixelsLabel">الميجابكسل</span>
+                <span id="imgMegapixels">-</span>
+              </div>
             </div>
           </div>
         </div>

@@ -2,8 +2,9 @@ import { initCanvas } from './canvas.js';
 import { setupUploadHandlers } from './upload.js';
 import { setupCanvasEvents } from './events.js';
 import { loadLocale, toggleLanguage, getStoredLang, t } from './i18n.js';
-import { exportToCSV } from './export.js';
+import { exportToCSV, exportToJSON } from './export.js';
 import { clearAllPoints, deletePoint, undo, redo } from './points.js';
+import { setupMetricsControls } from './metrics.js';
 import { setGrid, setZoom } from './controls.js';
 import { initTheme, toggleTheme } from './theme.js';
 import { setupKeyboardShortcuts, toggleShortcutsHelp } from './shortcuts.js';
@@ -16,6 +17,7 @@ initTheme();
 setupUploadHandlers();
 setupCanvasEvents();
 setupKeyboardShortcuts();
+setupMetricsControls();
 
 loadLocale(getStoredLang()).catch((err) => {
   console.error('Failed to load locale:', err);
@@ -37,6 +39,7 @@ document.getElementById('btnNewImage')?.addEventListener('click', () => {
 });
 
 document.getElementById('btnExport')?.addEventListener('click', exportToCSV);
+document.getElementById('btnExportJson')?.addEventListener('click', exportToJSON);
 document.getElementById('btnClear')?.addEventListener('click', () => {
   clearAllPoints().catch((err) => console.error('Failed to clear points:', err));
 });
