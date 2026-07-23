@@ -665,6 +665,9 @@ input[type='checkbox'] {
 .calibration-controls input[type='number'] {
   flex: 1;
   min-width: 0;
+  /* Without an explicit width, the number input keeps its UA default intrinsic
+     size, which stops the sidebar from collapsing on very narrow viewports. */
+  width: 100%;
   padding: 8px 10px;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
@@ -698,8 +701,10 @@ input[type='checkbox'] {
 
 .calibration-actions .btn-primary,
 .calibration-actions .btn-secondary {
-  flex: 1;
-  white-space: nowrap;
+  flex: 1 1 auto;
+  /* Allow the label to wrap and the button to shrink so the sidebar can
+     collapse on very narrow viewports instead of forcing the page wider. */
+  min-width: 0;
 }
 
 .cal-status {
