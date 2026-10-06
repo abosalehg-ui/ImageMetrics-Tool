@@ -2,13 +2,14 @@
 /** @typedef {import('./types.d.ts').ImageMetrics} ImageMetrics */
 
 /**
- * Euclidean distance between two 2D points, rounded to nearest integer.
+ * Euclidean distance between two 2D points. Unrounded, so derived values such
+ * as a calibration scale keep full precision; round only for display.
  * @param {{ x: number, y: number }} p1
  * @param {{ x: number, y: number }} p2
  * @returns {number}
  */
 export function distance(p1, p2) {
-  return Math.round(Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2)));
+  return Math.hypot(p2.x - p1.x, p2.y - p1.y);
 }
 
 /**
@@ -35,8 +36,9 @@ export function angleAt(vertex, a, b) {
 
 /**
  * Total length of the open polyline through `points`, i.e. the sum of the
- * distances between consecutive points, rounded to nearest integer. Returns 0
- * for fewer than two points. Pure.
+ * distances between consecutive points. Unrounded, like distance(), so a
+ * two-point path equals the distance exactly and calibration stays precise.
+ * Returns 0 for fewer than two points. Pure.
  * @param {{ x: number, y: number }[]} points
  * @returns {number}
  */
@@ -45,12 +47,13 @@ export function pathLength(points) {
   for (let i = 1; i < points.length; i++) {
     total += Math.hypot(points[i].x - points[i - 1].x, points[i].y - points[i - 1].y);
   }
-  return Math.round(total);
+  return total;
 }
 
 /**
  * Area of the closed polygon whose vertices are `points`, via the shoelace
- * formula, rounded to nearest integer. Returns 0 for fewer than three points.
+ * formula. Unrounded (integer vertices give multiples of 0.5); round for
+ * display only. Returns 0 for fewer than three points.
  * The result is unsigned, so winding order does not matter. Pure.
  * @param {{ x: number, y: number }[]} points
  * @returns {number}
@@ -63,7 +66,7 @@ export function polygonArea(points) {
     const j = (i + 1) % n;
     sum += points[i].x * points[j].y - points[j].x * points[i].y;
   }
-  return Math.round(Math.abs(sum) / 2);
+  return Math.abs(sum) / 2;
 }
 
 /**

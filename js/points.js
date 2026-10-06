@@ -1,11 +1,8 @@
 import { store, setState } from './state.js';
 import { t } from './i18n.js';
-import { renderCanvas } from './canvas.js';
-import { distance } from './measurements.js';
-import { formatLength } from './calibration.js';
-import { updateMetricsPanel } from './metrics.js';
+import { refreshPointsUI } from './render.js';
 import { confirmDialog } from './ui/dialog.js';
-import { pushHistory, undoHistory, redoHistory, canUndo, canRedo } from './history.js';
+import { pushHistory, undoHistory, redoHistory } from './history.js';
 
 /** @typedef {import('./types.d.ts').Point} Point */
 
@@ -18,15 +15,6 @@ function commitPoints(newPoints) {
   pushHistory(store.points);
   setState({ points: newPoints });
   refreshPointsUI();
-}
-
-/** Re-render the canvas and all point-derived UI in one place. */
-export function refreshPointsUI() {
-  renderCanvas();
-  updatePointsList();
-  updateDistanceDisplay();
-  updateHistoryButtons();
-  updateMetricsPanel();
 }
 
 /**
@@ -70,67 +58,4 @@ export function redo() {
   if (next === null) return;
   setState({ points: next });
   refreshPointsUI();
-}
-
-/** Sync the undo/redo buttons' disabled state with the history stacks. */
-export function updateHistoryButtons() {
-  const undoBtn = /** @type {HTMLButtonElement | null} */ (document.getElementById('btnUndo'));
-  const redoBtn = /** @type {HTMLButtonElement | null} */ (document.getElementById('btnRedo'));
-  if (undoBtn) undoBtn.disabled = !canUndo();
-  if (redoBtn) redoBtn.disabled = !canRedo();
-}
-
-export function updatePointsList() {
-  const list = document.getElementById('pointsList');
-  if (!list) return;
-  const { points } = store;
-
-  list.innerHTML = '';
-
-  if (points.length === 0) {
-    const empty = document.createElement('p');
-    empty.textContent = t('noPoints');
-    list.appendChild(empty);
-    return;
-  }
-
-  points.forEach((point, idx) => {
-    const div = document.createElement('div');
-    div.className = 'point-item';
-
-    const info = document.createElement('div');
-    const strong = document.createElement('strong');
-    strong.textContent = `${t('point')} ${idx + 1}`;
-    const small = document.createElement('small');
-    small.textContent = point.color;
-    info.append(
-      strong,
-      document.createElement('br'),
-      document.createTextNode(`X: ${point.x}, Y: ${point.y}`),
-      document.createElement('br'),
-      small
-    );
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-point';
-    deleteBtn.dataset.index = String(idx);
-    deleteBtn.textContent = '❌';
-
-    div.append(info, deleteBtn);
-    list.appendChild(div);
-  });
-}
-
-export function updateDistanceDisplay() {
-  const { points } = store;
-  const displayEl = document.getElementById('distanceDisplay');
-  if (!displayEl) return;
-  if (points.length >= 2) {
-    const dist = distance(points[points.length - 2], points[points.length - 1]);
-    const valueEl = document.getElementById('distanceValue');
-    if (valueEl) valueEl.textContent = formatLength(dist, store.calibration);
-    displayEl.classList.add('active');
-  } else {
-    displayEl.classList.remove('active');
-  }
 }

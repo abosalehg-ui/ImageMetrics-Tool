@@ -41,6 +41,8 @@ export interface Store {
   lang: Lang;
   isDragging: boolean;
   calibration: Calibration | null;
+  /** Keyboard-driven pixel cursor, shown while the canvas has keyboard focus. */
+  cursor: { x: number; y: number } | null;
 }
 
 export type Translations = Record<string, string | string[]>;

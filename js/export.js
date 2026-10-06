@@ -81,7 +81,9 @@ function downloadFile(content, filename, mimeType) {
   a.href = url;
   a.download = filename;
   a.click();
-  URL.revokeObjectURL(url);
+  // Revoking synchronously can cancel the download in some Safari/Firefox
+  // versions, so defer it until the click has been handed off.
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
 export function exportToCSV() {
@@ -113,9 +115,11 @@ export function exportToJSON() {
   };
   if (img) meta.image = imageMetrics(img.width, img.height);
   if (calibration) meta.calibration = calibration;
+  // Measurements are computed unrounded; two decimals is plenty for a file.
+  const round2 = (/** @type {number} */ n) => Math.round(n * 100) / 100;
   meta.measurements = {
-    pathLength: pathLength(points),
-    polygonArea: polygonArea(points),
+    pathLength: round2(pathLength(points)),
+    polygonArea: round2(polygonArea(points)),
     boundingBox: boundingBox(points),
   };
 

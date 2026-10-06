@@ -1,5 +1,5 @@
 import { store, setState } from './state.js';
-import { renderCanvas, maxSafeZoomPercent } from './canvas.js';
+import { renderCanvas, maxSafeZoomPercent, canvasAreaLimit } from './canvas.js';
 import { t } from './i18n.js';
 import { showToast } from './ui/toast.js';
 
@@ -55,7 +55,7 @@ export function setZoom(percent) {
   const requested = clampZoom(percent);
   let applied = requested;
   if (store.img) {
-    const safeMax = maxSafeZoomPercent(store.img.width, store.img.height);
+    const safeMax = maxSafeZoomPercent(store.img.width, store.img.height, canvasAreaLimit());
     applied = Math.min(requested, safeMax);
   }
 

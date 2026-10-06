@@ -7,6 +7,7 @@
   --brand-500: #d97757;
   --brand-600: #cc6244;
   --brand-700: #b85739;
+  --brand-800: #a34d30;
 
   /* Neutrals (warm stone) */
   --color-bg: #fafaf9;
@@ -16,11 +17,13 @@
   --color-border-strong: #d6d3d1;
   --color-text: #1c1917;
   --color-text-muted: #57534e;
-  --color-text-subtle: #a8a29e;
+  --color-text-subtle: #78716c;
 
-  /* Semantic */
-  --color-primary: var(--brand-500);
-  --color-primary-hover: var(--brand-600);
+  /* Semantic. --color-primary carries white text (≥ 4.5:1, WCAG AA);
+     --color-primary-text is the brand color used as text on surfaces. */
+  --color-primary: var(--brand-700);
+  --color-primary-hover: var(--brand-800);
+  --color-primary-text: var(--brand-700);
   --color-primary-soft: var(--brand-50);
   --color-danger: #dc2626;
   --color-danger-hover: #b91c1c;
@@ -50,9 +53,9 @@
   --dur-base: 180ms;
 }
 
-/* Dark theme tokens. Applied either by explicit user opt-in
-   (html[data-theme='dark']) or, when no explicit choice is stored, by the
-   system preference. html[data-theme='light'] always keeps the light defaults. */
+/* Dark theme tokens. theme.js always sets html[data-theme] — from the stored
+   choice, or else from the system preference (kept in sync live) — so the
+   dark palette is defined exactly once here. */
 :root[data-theme='dark'] {
   --color-bg: #0c0a09;
   --color-surface: #1c1917;
@@ -61,30 +64,13 @@
   --color-border-strong: #44403c;
   --color-text: #fafaf9;
   --color-text-muted: #a8a29e;
-  --color-text-subtle: #78716c;
+  --color-text-subtle: #8f8a84;
+  --color-primary-text: var(--brand-500);
   --color-primary-soft: #2a1c14;
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --color-bg: #0c0a09;
-    --color-surface: #1c1917;
-    --color-surface-alt: #292524;
-    --color-border: #292524;
-    --color-border-strong: #44403c;
-    --color-text: #fafaf9;
-    --color-text-muted: #a8a29e;
-    --color-text-subtle: #78716c;
-    --color-primary-soft: #2a1c14;
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
-  }
 }
 
 /* ===== Reset & base ===== */
@@ -181,7 +167,7 @@ body {
 .lang-switch:hover {
   background: var(--color-primary-soft);
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 
 /* ===== Main grid ===== */
@@ -319,12 +305,29 @@ body {
   display: block;
 }
 
-canvas {
+/* Two stacked layers: #imageCanvas shows the image and is redrawn only on
+   zoom/image change; #mainCanvas on top holds points, grid and cursor and
+   receives all pointer and keyboard input. */
+.canvas-stack {
+  position: relative;
+  width: max-content;
+}
+
+.canvas-stack canvas {
   display: block;
+}
+
+#mainCanvas {
+  position: absolute;
+  inset: 0;
   cursor: crosshair;
 }
 
-canvas.grabbing {
+#mainCanvas:focus-visible {
+  outline-offset: -2px;
+}
+
+#mainCanvas.grabbing {
   cursor: grabbing;
 }
 
@@ -521,7 +524,14 @@ input[type='checkbox'] {
   font-size: 11px;
 }
 
+/* Letter-spacing breaks the joins of Arabic script. */
+:lang(ar) .coord-label {
+  letter-spacing: normal;
+}
+
 .coord-item > span:not(.coord-label) {
+  direction: ltr;
+  unicode-bidi: isolate;
   color: var(--color-text);
   font-variant-numeric: tabular-nums;
 }
@@ -626,7 +636,7 @@ input[type='checkbox'] {
 .distance-display {
   margin-top: 14px;
   padding: 14px 18px;
-  background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+  background: linear-gradient(135deg, var(--brand-700), var(--brand-800));
   color: white;
   border-radius: var(--radius-md);
   font-weight: 500;
@@ -642,6 +652,10 @@ input[type='checkbox'] {
 }
 
 #distanceValue {
+  /* "123 px · 4.5 cm" is LTR data; isolate it so an RTL page can't reorder it. */
+  display: inline-block;
+  direction: ltr;
+  unicode-bidi: isolate;
   font-size: 20px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -731,7 +745,7 @@ input[type='checkbox'] {
 }
 
 .footer a {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   text-decoration: none;
   font-weight: 500;
 }
@@ -795,11 +809,22 @@ input[type='checkbox'] {
     width: 100%;
     margin-inline-start: 0;
   }
-}
 
-/* Hide unused legacy class - was used in HTML inline style */
-canvas.dragging {
-  cursor: grab;
+  /* Touch targets: at least 44×44 CSS px (WCAG 2.5.5 / platform guidelines). */
+  button,
+  .lang-switch,
+  .icon-btn {
+    min-height: 44px;
+  }
+
+  .icon-btn {
+    min-width: 44px;
+  }
+
+  .delete-point {
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 
 /* ===== Toasts ===== */

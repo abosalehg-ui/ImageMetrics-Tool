@@ -8,6 +8,7 @@
     "Move mouse to see live coordinates",
     "Select two points to measure distance",
     "Hold Shift and drag to pan when zoomed",
+    "Keyboard: Tab to the image, arrow keys move the cursor, Enter saves a point",
     "Export points to CSV file"
   ],
   "uploadTitle": "Drag & Drop Image Here",
@@ -33,7 +34,7 @@
   "errorZeroDimension": "The image has no visible dimensions and can't be loaded",
   "errorLocaleLoad": "Failed to load the interface language",
   "zoomCapped": "Zoom limited to keep this image within the browser's safe canvas size",
-  "ariaCanvas": "Image canvas - click to add a measurement point",
+  "ariaCanvas": "Image canvas — click to add a measurement point, or use the arrow keys to move the cursor and Enter to save a point",
   "ariaLangSwitch": "Switch language",
   "ariaNewImage": "Upload a new image",
   "ariaExport": "Export points to CSV file",
@@ -78,5 +79,10 @@
   "imageMetricsTitle": "🖼️ Image metrics",
   "imgDimensionsLabel": "Dimensions",
   "imgAspectLabel": "Aspect ratio",
-  "imgMegapixelsLabel": "Megapixels"
+  "imgMegapixelsLabel": "Megapixels",
+  "ariaDeletePoint": "Delete point",
+  "errorTooManyPixels": "Image dimensions are too large (max 100 megapixels)",
+  "footerDeveloper": "Developed by: Abdulkareem Alaboud",
+  "footerRights": "All rights reserved",
+  "scCursor": "Move the cursor on the image and save a point"
 }

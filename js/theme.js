@@ -16,16 +16,23 @@ export function getStoredTheme() {
 }
 
 /**
- * Apply a theme by setting (or clearing) the data-theme attribute on <html>.
- * Passing null removes the override so the system preference takes over again.
- * @param {Theme | null} theme
+ * The system color-scheme preference.
+ * @returns {Theme}
+ */
+export function systemTheme() {
+  const prefersDark =
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return prefersDark ? 'dark' : 'light';
+}
+
+/**
+ * Apply a theme by setting the data-theme attribute on <html>. The attribute
+ * is always present so the stylesheet only needs a single dark-token block.
+ * @param {Theme} theme
  */
 export function applyTheme(theme) {
-  if (theme === 'light' || theme === 'dark') {
-    document.documentElement.setAttribute('data-theme', theme);
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-  }
+  document.documentElement.setAttribute('data-theme', theme);
 }
 
 /**
@@ -34,12 +41,7 @@ export function applyTheme(theme) {
  * @returns {Theme}
  */
 export function effectiveTheme() {
-  const stored = getStoredTheme();
-  if (stored) return stored;
-  const prefersDark =
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches;
-  return prefersDark ? 'dark' : 'light';
+  return getStoredTheme() ?? systemTheme();
 }
 
 function updateToggleButton() {
@@ -51,10 +53,20 @@ function updateToggleButton() {
   btn.setAttribute('aria-pressed', String(isDark));
 }
 
-/** Apply the stored preference (if any) on startup and sync the toggle button. */
+/**
+ * Apply the effective theme on startup, and keep following the system
+ * preference live for as long as the user hasn't made an explicit choice.
+ */
 export function initTheme() {
-  applyTheme(getStoredTheme());
+  applyTheme(effectiveTheme());
   updateToggleButton();
+
+  if (typeof window.matchMedia !== 'function') return;
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => {
+    if (getStoredTheme()) return;
+    applyTheme(systemTheme());
+    updateToggleButton();
+  });
 }
 
 /** Flip between light and dark, persisting the choice. */

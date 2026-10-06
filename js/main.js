@@ -4,20 +4,26 @@ import { setupCanvasEvents } from './events.js';
 import { loadLocale, toggleLanguage, getStoredLang, t } from './i18n.js';
 import { exportToCSV, exportToJSON } from './export.js';
 import { clearAllPoints, deletePoint, undo, redo } from './points.js';
-import { setupMetricsControls } from './metrics.js';
+import { setupCalibrationControls } from './calibrationControls.js';
 import { setGrid, setZoom } from './controls.js';
 import { initTheme, toggleTheme } from './theme.js';
 import { setupKeyboardShortcuts, toggleShortcutsHelp } from './shortcuts.js';
 import { showToast } from './ui/toast.js';
 
+const imageCanvas = /** @type {HTMLCanvasElement | null} */ (
+  document.getElementById('imageCanvas')
+);
 const mainCanvas = /** @type {HTMLCanvasElement | null} */ (document.getElementById('mainCanvas'));
-if (mainCanvas) initCanvas(mainCanvas);
+if (imageCanvas && mainCanvas) initCanvas(imageCanvas, mainCanvas);
 
 initTheme();
+
+const footerYear = document.getElementById('footerYear');
+if (footerYear) footerYear.textContent = String(new Date().getFullYear());
 setupUploadHandlers();
 setupCanvasEvents();
 setupKeyboardShortcuts();
-setupMetricsControls();
+setupCalibrationControls();
 
 loadLocale(getStoredLang()).catch((err) => {
   console.error('Failed to load locale:', err);

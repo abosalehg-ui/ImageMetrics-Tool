@@ -1,6 +1,5 @@
 import { setState } from './state.js';
-import { updatePointsList, updateDistanceDisplay, updateHistoryButtons } from './points.js';
-import { updateMetricsPanel } from './metrics.js';
+import { refreshPointsUI } from './render.js';
 import { clearCalibration } from './calibration.js';
 import { resetHistory } from './history.js';
 import { setZoom, resetZoomCapWarning } from './controls.js';
@@ -9,6 +8,13 @@ import { showToast } from './ui/toast.js';
 
 /** Maximum accepted image file size (25 MB) before we refuse to load it. */
 export const MAX_FILE_SIZE = 25 * 1024 * 1024;
+
+/**
+ * Maximum decoded pixel count (100 MP). A small, highly compressed file can
+ * declare enormous dimensions (a "decompression bomb") that would need
+ * gigabytes of memory once decoded, so we refuse it before ever drawing it.
+ */
+export const MAX_IMAGE_PIXELS = 100_000_000;
 
 export function setupUploadHandlers() {
   const uploadZone = document.getElementById('uploadZone');
@@ -57,6 +63,24 @@ export function validateImageFile(file) {
   return { ok: true };
 }
 
+/**
+ * Validate decoded image dimensions: non-empty and within MAX_IMAGE_PIXELS.
+ * @param {number} width
+ * @param {number} height
+ * @returns {{ ok: true } | { ok: false, reason: string }}
+ */
+export function validateImageDimensions(width, height) {
+  // A malformed/dimensionless SVG decodes "successfully" but yields a
+  // zero-size image, which would otherwise produce a silently blank canvas.
+  if (width === 0 || height === 0) {
+    return { ok: false, reason: t('errorZeroDimension') };
+  }
+  if (width * height > MAX_IMAGE_PIXELS) {
+    return { ok: false, reason: t('errorTooManyPixels') };
+  }
+  return { ok: true };
+}
+
 /** @param {File} file */
 export function loadImage(file) {
   const validation = validateImageFile(file);
@@ -78,25 +102,23 @@ export function loadImage(file) {
   img.onload = () => {
     URL.revokeObjectURL(url);
 
-    // A malformed/dimensionless SVG decodes "successfully" but yields a
-    // zero-size image, which would otherwise produce a silently blank canvas.
-    if (img.width === 0 || img.height === 0) {
-      showToast(t('errorZeroDimension'), 'error');
+    // Browsers decode lazily on first draw, so checking here — before anything
+    // is drawn — keeps an oversized image from ever being fully decoded.
+    const dims = validateImageDimensions(img.width, img.height);
+    if (!dims.ok) {
+      showToast(dims.reason, 'error');
       return;
     }
 
     document.getElementById('canvasContainer')?.classList.add('active');
-    setState({ img, points: [] });
+    setState({ img, points: [], cursor: null });
     // Calibration is tied to a specific image's pixel scale, so a new image
     // invalidates it.
     clearCalibration();
     resetHistory();
     resetZoomCapWarning();
     setZoom(100);
-    updatePointsList();
-    updateDistanceDisplay();
-    updateHistoryButtons();
-    updateMetricsPanel();
+    refreshPointsUI();
   };
 
   img.src = url;

@@ -24,6 +24,8 @@ function isEditableTarget(target) {
 export function setupKeyboardShortcuts() {
   document.addEventListener('keydown', (e) => {
     if (isEditableTarget(e.target)) return;
+    // A modal confirm dialog owns the keyboard; don't mutate state behind it.
+    if (document.querySelector('.dialog-overlay')) return;
 
     const mod = e.ctrlKey || e.metaKey;
     const key = e.key.toLowerCase();
