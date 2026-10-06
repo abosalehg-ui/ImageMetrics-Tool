@@ -12,6 +12,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### إصلاحات مراجعة مِحَك / Mihak Review Fixes
+
+- **Fixed:**
+  - لون البكسل كان يُقرأ من الكانفس المعروض، فيلتقط علامات النقاط وخطوط الشبكة وألواناً مُنعَّمة غير موجودة في الصورة عند التكبير (وتُحفظ في CSV). أصبح يُقرأ من الصورة الأصلية عبر كانفس 1×1 (`samplePixel` في `js/canvas.js`). / Pixel colors were read from the displayed canvas, picking up point markers, grid lines and interpolated colors that don't exist in the image (and saving them to CSV). They're now read from the source image through a 1×1 canvas (`samplePixel`).
+  - الإحداثيات كانت تُقرَّب بـ `Math.round` فتنزاح بكسلاً وقد تتجاوز الصورة (`X: 100` في صورة عرضها 100). أصبحت `Math.floor` مقيّدة بحدود الصورة (`toImagePixel`). / Coordinates used `Math.round`, shifting by a pixel and able to exceed the image (`X: 100` in a 100-px-wide image). They now floor and clamp (`toImagePixel`).
+  - المعايرة وطول المسار والمساحة كانت تُبنى على قيم مقرّبة لعدد صحيح (خطأ حتى 11% مع المراجع القصيرة). `distance` و`pathLength` و`polygonArea` أصبحت بلا تقريب، والتقريب للعرض فقط. / Calibration, path length and area were built on integer-rounded values (up to 11% error with short references). `distance`, `pathLength` and `polygonArea` are now unrounded; rounding is display-only.
+  - Enter على زر "إلغاء" في حوار التأكيد كان يمسح كل النقاط. / Pressing Enter on the confirm dialog's Cancel button cleared all points.
+  - اختصارات لوحة المفاتيح كانت تعدّل الحالة خلف حوار التأكيد المفتوح. / Keyboard shortcuts mutated state behind an open confirm dialog.
+  - التنزيل قد يُلغى في بعض نسخ Safari/Firefox بسبب `revokeObjectURL` المتزامن. / Downloads could be cancelled in some Safari/Firefox versions by a synchronous `revokeObjectURL`.
+  - النصوص المختلطة (`#ff0000`، `52.2 px = 10 cm`) كانت تنقلب في سياق RTL. / Mixed-direction values (`#ff0000`, `52.2 px = 10 cm`) were reordered in RTL.
+- **Added:**
+  - إضافة النقاط بلوحة المفاتيح: Tab إلى الصورة، الأسهم لتحريك مؤشر (Shift = 10 بكسل)، Enter/Space للحفظ. / Keyboard point placement: Tab to the image, arrow keys move a cursor (Shift = 10 px), Enter/Space saves.
+  - رفض الصور التي تتجاوز 100 ميجابكسل قبل فك ترميزها (حماية من decompression bombs). / Images over 100 megapixels are rejected before decoding (decompression-bomb guard).
+  - حد مساحة للكانفس على iOS/iPadOS (4096²) يمنع الكانفس الفارغ عند التكبير. / A canvas area cap on iOS/iPadOS (4096²) prevents a blank canvas when zooming.
+  - Dependabot لاعتماديات npm وGitHub Actions، و`CONTRIBUTING.md`. / Dependabot for npm and GitHub Actions, and `CONTRIBUTING.md`.
+  - اختبارات E2E تتحقق من صحة الإحداثي واللون (صورة اختبار بألوان معروفة)، ومن لوحة المفاتيح وأمان الحوار؛ واختبارات وحدة جديدة (`upload`، `dialog`، `pointsView`). / E2E tests that assert coordinate and color correctness against a known-color fixture, plus keyboard and dialog-safety tests; new unit tests (`upload`, `dialog`, `pointsView`).
+- **Changed:**
+  - الكانفس طبقتان: طبقة الصورة تُرسم فقط عند تغيّر الصورة أو التكبير، وطبقة علوية خفيفة للنقاط والشبكة. لم يعد الكانفس يُعاد تخصيصه مع كل نقرة. التكبير يعرض البكسلات بحدّة (nearest-neighbour). / The canvas is now two layers: the image layer redraws only on image/zoom change, a light overlay holds points and grid. No more reallocation on every click. Magnification is nearest-neighbour so pixels stay crisp.
+  - النقاط تُرسم في منتصف البكسل. / Points are drawn at the pixel center.
+  - فك الاستيراد الدائري `points.js` ↔ `metrics.js`: `refreshPointsUI` انتقلت لـ `js/render.js`، والعروض لـ `js/pointsView.js`، وأزرار المعايرة لـ `js/calibrationControls.js`. / Broke the `points.js` ↔ `metrics.js` import cycle: `refreshPointsUI` moved to `js/render.js`, views to `js/pointsView.js`, calibration buttons to `js/calibrationControls.js`.
+  - تباين WCAG AA: اللون الأساسي `#b85739` (4.7:1 مع الأبيض) والنص الخافت `#78716c`. / WCAG AA contrast: primary `#b85739` (4.7:1 with white), subtle text `#78716c`.
+  - رموز الوضع الليلي معرّفة مرة واحدة؛ `theme.js` يضبط `data-theme` دائماً ويتابع تفضيل النظام حيّاً. / Dark tokens are defined once; `theme.js` always sets `data-theme` and follows the system preference live.
+  - أهداف لمس 44px على الجوال، واسم مقروء لزر حذف النقطة، و`aria-labelledby` للوحة الاختصارات، وتذييل مترجم بسنة ديناميكية. / 44px touch targets on mobile, an accessible name for the delete-point button, `aria-labelledby` on the shortcuts panel, and a translated footer with a dynamic year.
+- **Security:**
+  - حُذف `'unsafe-inline'` من `style-src`، وحُذف `frame-ancestors` الذي لا أثر له داخل `<meta>`. / Removed `'unsafe-inline'` from `style-src` and the `frame-ancestors` directive, which has no effect in a `<meta>` CSP.
+  - ترقية `vitest` و`@vitest/coverage-v8` إلى 5.x و`serve` إلى 14.2.6 مع `overrides` لـ `compression` — `npm audit` نظيف (كان 17 ثغرة في أدوات التطوير). / Upgraded `vitest` and `@vitest/coverage-v8` to 5.x and `serve` to 14.2.6 with a `compression` override — `npm audit` is clean (was 17 dev-tooling vulnerabilities).
+
 ### خواص قياس جديدة / New Image Metrics Features
 
 - **Added:**
