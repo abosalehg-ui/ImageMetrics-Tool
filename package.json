@@ -4,6 +4,9 @@
   "description": "Web-based image measurement tool for precise pixel-level coordinate, distance, and color analysis",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "serve -l 8080 .",
     "test": "vitest",
@@ -34,13 +37,16 @@
   "devDependencies": {
     "@eslint/js": "^9.15.0",
     "@playwright/test": "^1.49.0",
-    "@vitest/coverage-v8": "^2.1.5",
+    "@vitest/coverage-v8": "^5.0.3",
     "eslint": "^9.15.0",
     "globals": "^15.12.0",
     "jsdom": "^25.0.1",
     "prettier": "^3.3.3",
-    "serve": "^14.2.4",
+    "serve": "^14.2.6",
     "typescript": "^5.6.3",
-    "vitest": "^2.1.5"
+    "vitest": "^5.0.3"
+  },
+  "overrides": {
+    "compression": "^1.8.2"
   }
 }
