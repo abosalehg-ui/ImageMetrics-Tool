@@ -29,7 +29,8 @@
 
 - **عرض مباشر**: إحداثيات X و Y تظهر فورياً عند تحريك الفأرة
 - **حفظ النقاط**: النقر على أي نقطة يحفظ إحداثياتها بشكل دائم
-- **نظام البكسل**: قياسات دقيقة بالبكسل من الزاوية العلوية اليسرى
+- **نظام البكسل**: قياسات دقيقة بالبكسل من الزاوية العلوية اليسرى؛ الإحداثي هو رقم البكسل الفعلي (0 حتى العرض − 1) واللون يُقرأ من الصورة الأصلية لا من الرسم فوقها
+- **لوحة المفاتيح**: Tab إلى الصورة، الأسهم لتحريك المؤشر (Shift للقفز 10 بكسل)، Enter لحفظ النقطة
 
 ### 📏 قياس المسافات
 
@@ -225,35 +226,7 @@ Point,X,Y,Color
 
 ## 🔧 استخدامات عملية
 
-### 📐 في التصميم الجرافيكي
-
-- قياس المسافات بين العناصر
-- تحديد مواقع النقاط الدقيقة
-- استخراج قيم الألوان
-
-### 🏗️ في الهندسة
-
-- قياس أبعاد المخططات
-- تحديد إحداثيات نقاط محددة
-- حساب المسافات الدقيقة
-
-### 🖼️ في معالجة الصور
-
-- تحليل مواقع البكسلات
-- استخراج بيانات الألوان
-- توثيق نقاط الاهتمام
-
-### 🎓 في التعليم
-
-- شرح نظام الإحداثيات
-- تدريس الهندسة التحليلية
-- تطبيقات الرياضيات البصرية
-
-### 🔬 في البحث العلمي
-
-- تحليل الصور المجهرية
-- قياس الأبعاد في الصور
-- توثيق البيانات المكانية
+التصميم الجرافيكي (المسافات بين العناصر واستخراج الألوان)، الهندسة (أبعاد المخططات بعد المعايرة)، معالجة الصور، التعليم (أنظمة الإحداثيات)، والبحث العلمي (قياس الأبعاد في الصور المجهرية).
 
 ---
 
@@ -265,7 +238,7 @@ Point,X,Y,Color
 
 ### ❓ ما هو الحد الأقصى لحجم الصورة؟
 
-يعتمد على قدرة متصفحك. عادة، يمكن التعامل مع صور حتى 10000×10000 بكسل.
+حجم الملف حتى 25 ميجابايت، وأبعاد الصورة حتى 100 ميجابكسل (مثل 10000×10000). على أجهزة iOS يُحد التكبير تلقائياً لتبقى الصورة ضمن حد مساحة Safari.
 
 ### ❓ هل يمكنني حفظ عملي؟
 
@@ -310,21 +283,9 @@ python3 -m http.server 8000
 
 **ملاحظة:** على GitHub Pages يعمل التطبيق بشكل طبيعي دون الحاجة لأي إعداد إضافي.
 
-### 🧪 سكريبتات المطوّر
+### 🧪 للمطوّرين
 
-```bash
-npm install              # تثبيت أدوات التطوير (أول مرة فقط)
-npm run dev              # خادم محلي للتطوير
-npm run lint             # فحص ESLint
-npm run format           # تطبيق Prettier
-npm run format:check     # التحقق من التنسيق
-npm test                 # تشغيل اختبارات الوحدة (Vitest، مراقبة)
-npm run test:run         # تشغيل اختبارات الوحدة مرة واحدة
-npm run test:coverage    # تشغيل مع تقرير التغطية
-npm run test:e2e         # تشغيل اختبارات Playwright (تتطلب: npx playwright install chromium أولاً)
-npm run test:e2e:ui      # تشغيل Playwright مع واجهة تفاعلية
-npm run typecheck        # فحص الأنواع بـ TypeScript (عبر JSDoc)
-```
+سكريبتات التطوير والاختبار وخطوات المساهمة موثّقة في [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
 ---
 
@@ -344,11 +305,7 @@ npm run typecheck        # فحص الأنواع بـ TypeScript (عبر JSDoc)
 
 ## 🤝 المساهمة
 
-نرحب بمساهماتكم! إذا كان لديك اقتراحات أو تحسينات:
-
-1. افتح Issue لمناقشة التغييرات
-2. قدم Pull Request مع وصف واضح
-3. تأكد من اختبار التغييرات
+نرحب بمساهماتكم! راجع [`CONTRIBUTING.md`](./CONTRIBUTING.md) لخطوات الإعداد والاختبار وفتح Pull Request.
 
 ---
 
@@ -396,9 +353,9 @@ npm run typecheck        # فحص الأنواع بـ TypeScript (عبر JSDoc)
 - [x] ~~اختصارات لوحة المفاتيح~~ ✅ _المرحلة 2_
 - [ ] حفظ المشروع بالكامل (LocalStorage / JSON)
 - [ ] رسم خطوط وأشكال
-- [ ] قياس الزوايا
-- [ ] قياس المساحات (مضلعات)
-- [ ] المعايرة بوحدات حقيقية (سم/بوصة)
+- [x] ~~قياس الزوايا~~ ✅
+- [x] ~~قياس المساحات (مضلعات)~~ ✅
+- [x] ~~المعايرة بوحدات حقيقية (سم/بوصة)~~ ✅
 - [ ] دعم ملفات PDF
 - [ ] طباعة النتائج
 - [ ] PWA (تثبيت + عمل دون اتصال)
@@ -431,7 +388,8 @@ npm run typecheck        # فحص الأنواع بـ TypeScript (عبر JSDoc)
 
 - **Live Display**: X & Y coordinates shown instantly on mouse move
 - **Point Saving**: Click any point to save its coordinates permanently
-- **Pixel System**: Accurate measurements in pixels from top-left corner
+- **Pixel System**: Accurate measurements in pixels from top-left corner; coordinates are true pixel indices (0 to width − 1) and colors are read from the original image, never from the overlay drawn on top
+- **Keyboard**: Tab to the image, arrow keys move the cursor (Shift jumps 10 px), Enter saves a point
 
 ### 📏 Distance Measurement
 
@@ -568,35 +526,7 @@ Point,X,Y,Color
 
 ## 🔧 Practical Uses
 
-### 📐 Graphic Design
-
-- Measure distances between elements
-- Determine precise point locations
-- Extract color values
-
-### 🏗️ Engineering
-
-- Measure blueprint dimensions
-- Identify specific point coordinates
-- Calculate accurate distances
-
-### 🖼️ Image Processing
-
-- Analyze pixel locations
-- Extract color data
-- Document points of interest
-
-### 🎓 Education
-
-- Explain coordinate systems
-- Teach analytic geometry
-- Visual mathematics applications
-
-### 🔬 Scientific Research
-
-- Analyze microscope images
-- Measure dimensions in images
-- Document spatial data
+Graphic design (spacing between elements, color picking), engineering (blueprint dimensions after calibration), image processing, education (coordinate systems), and scientific research (measuring dimensions in microscope images).
 
 ---
 
@@ -619,21 +549,9 @@ Then open `http://localhost:8000` (or whatever port the server prints).
 
 **Note:** The deployed app on GitHub Pages works out of the box — no extra setup required.
 
-### Developer Scripts
+### For developers
 
-```bash
-npm install              # Install dev tooling (first time only)
-npm run dev              # Start local dev server
-npm run lint             # Run ESLint
-npm run format           # Apply Prettier
-npm run format:check     # Verify formatting
-npm test                 # Run unit tests (Vitest, watch mode)
-npm run test:run         # Run unit tests once
-npm run test:coverage    # Run with coverage report
-npm run test:e2e         # Run Playwright E2E tests (first: npx playwright install chromium)
-npm run test:e2e:ui      # Run Playwright in interactive UI mode
-npm run typecheck        # Type-check the codebase via TypeScript (JSDoc-based)
-```
+Development and test scripts, and how to contribute, are documented in [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
 ---
 
@@ -695,9 +613,9 @@ This tool is open source under the MIT License. See [`LICENSE`](./LICENSE) for t
 - [x] ~~Keyboard shortcuts~~ ✅ _Phase 2_
 - [ ] Save entire project (LocalStorage / JSON)
 - [ ] Draw lines and shapes
-- [ ] Measure angles
-- [ ] Measure areas (polygons)
-- [ ] Real-world unit calibration (cm / inch)
+- [x] ~~Measure angles~~ ✅
+- [x] ~~Measure areas (polygons)~~ ✅
+- [x] ~~Real-world unit calibration (cm / inch)~~ ✅
 - [ ] PDF file support
 - [ ] Print results
 - [ ] PWA (installable + offline)

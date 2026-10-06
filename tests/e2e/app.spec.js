@@ -4,9 +4,11 @@ import { dirname, resolve } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const FIXTURE = resolve(__dirname, '../fixtures/sample.png');
+// 100×100: columns 0–49 pure red (#ff0000), columns 50–99 pure blue (#0000ff).
+const RED_BLUE = resolve(__dirname, '../fixtures/red-blue.png');
 
-async function uploadFixture(page) {
-  await page.setInputFiles('#fileInput', FIXTURE);
+async function uploadFixture(page, fixture = FIXTURE) {
+  await page.setInputFiles('#fileInput', fixture);
   // Image must load + canvas must activate before further interactions
   await expect(page.locator('#canvasContainer')).toHaveClass(/active/);
 }
@@ -169,6 +171,11 @@ test.describe('pan (Shift + drag)', () => {
       expect(scrollWidth).toBeGreaterThan(clientWidth);
     }).toPass();
 
+    // The zoom slider sits below the canvas; filling it can scroll the page far
+    // enough that the canvas leaves the viewport. Bring the container back so
+    // the mouse lands on it (this doesn't change its internal scroll).
+    await container.scrollIntoViewIfNeeded();
+
     // Start from the middle of the scrollable range so a drag has room to move either way.
     await container.evaluate((el) => {
       el.scrollLeft = -el.scrollWidth / 4;
@@ -315,5 +322,116 @@ test.describe('keyboard shortcuts help', () => {
 
     await page.keyboard.press('Shift+Tab');
     await expect(page.locator('#btnCloseShortcuts')).toBeFocused();
+  });
+});
+
+test.describe('measurement accuracy', () => {
+  test('live color reads the image, not the marker drawn over it', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page, RED_BLUE);
+    const canvas = page.locator('#mainCanvas');
+
+    await canvas.click({ position: { x: 20, y: 20 } });
+    // Hover the white number/outline of the saved point's marker.
+    await canvas.hover({ position: { x: 21, y: 21 } });
+    await canvas.hover({ position: { x: 20, y: 13 } });
+    await expect(page.locator('#liveHEX')).toHaveText('#ff0000');
+  });
+
+  test('grid lines do not change the sampled color', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page, RED_BLUE);
+    await page.locator('#gridToggle').check();
+
+    const canvas = page.locator('#mainCanvas');
+    await canvas.hover({ position: { x: 30, y: 49 } });
+    await canvas.hover({ position: { x: 30, y: 50 } });
+    await expect(page.locator('#liveHEX')).toHaveText('#ff0000');
+  });
+
+  test('saves the exact pixel index and color at 300% zoom', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page, RED_BLUE);
+    await page.locator('#zoomSlider').fill('300');
+    await expect(page.locator('#zoomValue')).toHaveText('300%');
+
+    const canvas = page.locator('#mainCanvas');
+    const lastPoint = page.locator('.point-item').last();
+
+    // Offset 149 lies inside pixel 49 (147–150): the last red column.
+    await canvas.click({ position: { x: 149, y: 200 } });
+    await expect(lastPoint).toContainText('X: 49, Y: 66');
+    await expect(lastPoint).toContainText('#ff0000');
+
+    // Offset 151 is pixel 50: the first blue column, with no blended color.
+    await canvas.click({ position: { x: 151, y: 200 } });
+    await expect(lastPoint).toContainText('X: 50, Y: 66');
+    await expect(lastPoint).toContainText('#0000ff');
+
+    // The very last rendered column is pixel 99, never an out-of-range 100.
+    await canvas.click({ position: { x: 299, y: 299 } });
+    await expect(lastPoint).toContainText('X: 99, Y: 99');
+  });
+});
+
+test.describe('keyboard measurement', () => {
+  test('arrow keys move the cursor and Enter saves a point', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page, RED_BLUE);
+
+    await page.locator('#mainCanvas').focus();
+    // The cursor starts at the image center (50, 50).
+    for (let i = 0; i < 3; i++) await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Shift+ArrowDown');
+    await expect(page.locator('#liveX')).toHaveText('53');
+    await expect(page.locator('#liveY')).toHaveText('61');
+
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.point-item')).toHaveCount(1);
+    await expect(page.locator('.point-item')).toContainText('X: 53, Y: 61');
+    await expect(page.locator('.point-item')).toContainText('#0000ff');
+  });
+
+  test('the cursor is clamped to the image bounds', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page, RED_BLUE);
+
+    await page.locator('#mainCanvas').focus();
+    for (let i = 0; i < 8; i++) await page.keyboard.press('Shift+ArrowLeft');
+    await expect(page.locator('#liveX')).toHaveText('0');
+  });
+});
+
+test.describe('confirm dialog keyboard safety', () => {
+  test('Enter on a focused Cancel button keeps the points', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page);
+
+    const canvas = page.locator('#mainCanvas');
+    await canvas.click({ position: { x: 10, y: 10 } });
+    await canvas.click({ position: { x: 40, y: 50 } });
+
+    await page.click('#btnClear');
+    await page.locator('.dialog-box .btn-secondary').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.dialog-overlay')).toHaveCount(0);
+    await expect(page.locator('.point-item')).toHaveCount(2);
+  });
+
+  test('global shortcuts are ignored while the dialog is open', async ({ page }) => {
+    await page.goto('/');
+    await uploadFixture(page);
+
+    const canvas = page.locator('#mainCanvas');
+    await canvas.click({ position: { x: 10, y: 10 } });
+    await canvas.click({ position: { x: 40, y: 50 } });
+
+    await page.click('#btnClear');
+    await page.keyboard.press('Delete');
+    await page.keyboard.press('Control+z');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.dialog-overlay')).toHaveCount(0);
+    await expect(page.locator('.point-item')).toHaveCount(2);
   });
 });

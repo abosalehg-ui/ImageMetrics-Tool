@@ -26,9 +26,10 @@ describe('distance', () => {
     expect(distance({ x: 5, y: 10 }, { x: 5, y: 25 })).toBe(15);
   });
 
-  it('rounds to the nearest integer', () => {
-    // sqrt(2) ≈ 1.414 → 1
-    expect(distance({ x: 0, y: 0 }, { x: 1, y: 1 })).toBe(1);
+  it('keeps full precision instead of rounding', () => {
+    // Rounding here used to skew calibration: (0,0)→(3,2) is 3.606, not 4.
+    expect(distance({ x: 0, y: 0 }, { x: 1, y: 1 })).toBeCloseTo(Math.SQRT2, 10);
+    expect(distance({ x: 0, y: 0 }, { x: 3, y: 2 })).toBeCloseTo(Math.sqrt(13), 10);
   });
 
   it('handles negative coordinates', () => {
@@ -99,6 +100,14 @@ describe('pathLength', () => {
         { x: 3, y: 9 },
       ])
     ).toBe(10);
+  });
+
+  it('is unrounded, so a two-point path equals the distance exactly', () => {
+    const pts = [
+      { x: 0, y: 0 },
+      { x: 3, y: 2 },
+    ];
+    expect(pathLength(pts)).toBe(distance(pts[0], pts[1]));
   });
 });
 

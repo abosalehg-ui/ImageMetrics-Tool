@@ -3,7 +3,8 @@ import { trapTabKey } from './focusTrap.js';
 /**
  * Show a modal confirmation dialog and resolve with the user's choice. Replaces
  * the native blocking `confirm()` with an accessible, styleable overlay that
- * traps focus and supports keyboard (Enter confirms, Escape cancels).
+ * traps focus and supports keyboard (Escape cancels; Enter/Space activate the
+ * focused button natively, so Enter on "Cancel" cancels).
  * @param {string} message
  * @param {{ confirmText?: string, cancelText?: string }} [options]
  * @returns {Promise<boolean>}
@@ -59,8 +60,6 @@ export function confirmDialog(message, options = {}) {
     const onKey = (e) => {
       if (e.key === 'Escape') {
         close(false);
-      } else if (e.key === 'Enter') {
-        close(true);
       } else {
         trapTabKey(e, box);
       }

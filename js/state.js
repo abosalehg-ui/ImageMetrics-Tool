@@ -9,11 +9,12 @@ export const store = {
   lang: 'ar',
   isDragging: false,
   calibration: null,
+  cursor: null,
 };
 
 /**
  * Merge a partial patch into the store. Callers that need the UI to reflect
- * the change re-render explicitly afterwards (see points.js refreshPointsUI,
+ * the change re-render explicitly afterwards (see render.js refreshPointsUI,
  * controls.js setZoom, etc.) — there is no subscriber/observer indirection.
  * @param {Partial<Store>} patch
  */
