@@ -5,7 +5,7 @@ version: 2
 # split into minor/patch and major, since majors are what can break the build.
 updates:
   - package-ecosystem: npm
-    directory: "/"
+    directory: '/'
     schedule:
       interval: monthly
     open-pull-requests-limit: 5
@@ -13,16 +13,16 @@ updates:
       dev-dependencies:
         dependency-type: development
       minor-and-patch:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
+        patterns: ['*']
+        update-types: ['minor', 'patch']
       major:
-        patterns: ["*"]
-        update-types: ["major"]
+        patterns: ['*']
+        update-types: ['major']
 
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: '/'
     schedule:
       interval: monthly
     groups:
       github-actions:
-        patterns: ["*"]
+        patterns: ['*']
